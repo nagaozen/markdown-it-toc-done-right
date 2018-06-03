@@ -1,0 +1,34 @@
+{
+  "name": "markdown-it-toc-done-right",
+  "version": "1.0.0",
+  "description": "Table of contents (TOC) for markdown-it markdown parser with focus on semantic and security.",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nagaozen/markdown-it-toc-done-right.git"
+  },
+  "keywords": [
+    "markdown-it-plugin",
+    "markdown-it",
+    "markdown",
+    "toc",
+    "table of contents"
+  ],
+  "author": "Nagao, Fabio Zendhi <https://github.com/nagaozen>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nagaozen/markdown-it-toc-done-right/issues"
+  },
+  "homepage": "https://github.com/nagaozen/markdown-it-toc-done-right#readme",
+  "dependencies": {
+    "string": "^3.3.3"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "es6-templates": "^0.2.3",
+    "eslint": "^4.19.1",
+    "uglify-js": "^3.4.0"
+  }
+}
