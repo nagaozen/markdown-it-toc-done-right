@@ -1,45 +1,43 @@
 "use strict"
 
-var S = require("string");
-
-var defaults = {
-	placeholder: "${toc}",
-	slugify: function(s) {
-		return S(s).slugify().toString();
-	},
-	containerClass: "table-of-contents",
-	listType: "ol",
-	format: undefined
-};
+const S = require("string");
 
 function htmlencode(x) {
-	// safest, delegate task to native
-	if(document && document.createElement) {
-		var el = document.createElement("div");
+	// safest, delegate task to native -- IMPORTANT: enabling this breaks both jest and runkit
+/*	if(document && document.createElement) {
+		const el = document.createElement("div");
 		el.innerText = x;
 		return el.innerHTML;
-	}
+	}*/
 
-	// string.js uses a hard-coded list of entities based on underscore.string, so it's possible that something is missing out.  
+	// string.js uses a hard-coded list of entities based on underscore.string, so it's possible that something is missing out.
 	return S(x).escapeHTML();
 }
 
 module.exports = function toc_plugin(md, options) {
 
-	options = Object.assign({}, defaults, options);
+	options = Object.assign({}, {
+		placeholder: "${toc}",
+		slugify: function(s) {
+			return S(s).slugify().toString();
+		},
+		containerClass: "table-of-contents",
+		listType: "ol",
+		format: undefined
+	}, options);
 
-	var final_state;
+	let final_state;
 
 	function toc(state, startLine, endLine, silent) {
-		var token;
-		var pos = state.bMarks[startLine] + state.tShift[startLine];
-		var max = state.eMarks[startLine];
+		let token;
+		const pos = state.bMarks[startLine] + state.tShift[startLine];
+		const max = state.eMarks[startLine];
 
 		// if it's indented more than 3 spaces, it should be a code block
 		if(state.sCount[startLine] - state.blkIndent >= 4) return false;
 
 		// check starting chars and reject fast if they doesn't match
-		for(var i = 0, len = options.placeholder.length; i < len; i++) {
+		for(let i = 0, len = options.placeholder.length; i < len; i++) {
 			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
 		}
 
@@ -75,12 +73,12 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	function ast_html(tree) {
-		var keys = Object.keys(tree);
+		const keys = Object.keys(tree);
 		if( keys.length === 0 ) return "";
 
-		var buffer = (`<${htmlencode(options.listType)}>`);
+		let buffer = (`<${htmlencode(options.listType)}>`);
 		keys.forEach(function(key){
-			var node = tree[key];
+			const node = tree[key];
 			buffer += (`<li><a href="#${options.slugify(key)}">${typeof options.format === "function" ? options.format(key) : htmlencode(key)}</a>${ast_html(node)}</li>`);
 		});
 		buffer += (`</${htmlencode(options.listType)}>`);
@@ -89,17 +87,18 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	function headings_ast(tokens) {
-		var headings = {};
-		var initial_depth = -1;
-		var stack = [];
-		var depth, latest;
-		for(var i = 0, iK = tokens.length, token; i < iK; i++) {
+		const headings = {};
+		let initial_depth = -1;
+		const stack = [];
+		let depth;
+		let latest;
+		for(let i = 0, iK = tokens.length, token; i < iK; i++) {
 			token = tokens[i];
 			if(token.type === "heading_open") {
-				var current_depth = parseInt(token.tag.substr(1), 10);
-				var current_heading = tokens[i+1].children
-				                                 .filter(function(token){return token.type === 'text' || token.type === 'code_inline'})
-				                                 .reduce(function(acc, t){return acc + t.content}, '');
+				const current_depth = parseInt(token.tag.substr(1), 10);
+				const current_heading = tokens[i+1].children
+				                                   .filter(function(token){return token.type === 'text' || token.type === 'code_inline'})
+				                                   .reduce(function(acc, t){return acc + t.content}, '');
 
 				if( initial_depth === -1 ) {
 					initial_depth = current_depth;
@@ -111,7 +110,7 @@ module.exports = function toc_plugin(md, options) {
 					stack.unshift(latest);
 					depth = current_depth;
 				} else if( current_depth < depth ) {
-					for(var j = current_depth, jK = depth; j < jK; j++) stack.shift();
+					for(let j = Math.max(initial_depth, current_depth), jK = depth; j < jK; j++) stack.shift();
 					depth = current_depth;
 				}
 				latest = {};

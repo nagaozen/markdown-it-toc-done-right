@@ -1,4 +1,4 @@
-/*! markdown-it-toc-done-right 1.0.0 https://github.com//nagaozen/markdown-it-toc-done-right @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitTocDoneRight = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*! markdown-it-toc-done-right 1.0.1 https://github.com//nagaozen/markdown-it-toc-done-right @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitTocDoneRight = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 function count(self, substr) {
   var count = 0
   var pos = self.indexOf(substr)
@@ -1185,92 +1185,90 @@ string.js - Copyright (C) 2012-2014, JP Richardson <jprichardson@gmail.com>
 }).call(this);
 
 },{"./_count":1,"./_splitLeft":2,"./_splitRight":3}],5:[function(require,module,exports){
-"use strict"
+"use strict";
 
 var S = require("string");
 
-var defaults = {
-	placeholder: "${toc}",
-	slugify: function(s) {
-		return S(s).slugify().toString();
-	},
-	containerClass: "table-of-contents",
-	listType: "ol",
-	format: undefined
-};
-
 function htmlencode(x) {
-	// safest, delegate task to native
-	if(document && document.createElement) {
-		var el = document.createElement("div");
-		el.innerText = x;
-		return el.innerHTML;
-	}
+	// safest, delegate task to native -- IMPORTANT: enabling this breaks both jest and runkit
+	/*	if(document && document.createElement) {
+ 		const el = document.createElement("div");
+ 		el.innerText = x;
+ 		return el.innerHTML;
+ 	}*/
 
-	// string.js uses a hard-coded list of entities based on underscore.string, so it's possible that something is missing out.  
+	// string.js uses a hard-coded list of entities based on underscore.string, so it's possible that something is missing out.
 	return S(x).escapeHTML();
 }
 
 module.exports = function toc_plugin(md, options) {
 
-	options = Object.assign({}, defaults, options);
+	options = Object.assign({}, {
+		placeholder: "${toc}",
+		slugify: function slugify(s) {
+			return S(s).slugify().toString();
+		},
+		containerClass: "table-of-contents",
+		listType: "ol",
+		format: undefined
+	}, options);
 
-	var final_state;
+	var final_state = void 0;
 
 	function toc(state, startLine, endLine, silent) {
-		var token;
+		var token = void 0;
 		var pos = state.bMarks[startLine] + state.tShift[startLine];
 		var max = state.eMarks[startLine];
 
 		// if it's indented more than 3 spaces, it should be a code block
-		if(state.sCount[startLine] - state.blkIndent >= 4) return false;
+		if (state.sCount[startLine] - state.blkIndent >= 4) return false;
 
 		// check starting chars and reject fast if they doesn't match
-		for(var i = 0, len = options.placeholder.length; i < len; i++) {
+		for (var i = 0, len = options.placeholder.length; i < len; i++) {
 			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
 		}
 
-		if(silent) return true;
+		if (silent) return true;
 
 		state.line = startLine + 1;
 
-		token        = state.push("toc_open", "nav", 1);
+		token = state.push("toc_open", "nav", 1);
 		token.markup = options.placeholder;
-		token.map    = [ startLine, state.line ];
+		token.map = [startLine, state.line];
 
-		token          = state.push("toc_body", "", 0);
-		token.markup   = options.placeholder;
-		token.map      = [ startLine, state.line ];
+		token = state.push("toc_body", "", 0);
+		token.markup = options.placeholder;
+		token.map = [startLine, state.line];
 		token.children = [];
 
-		token        = state.push("toc_close", "nav", -1);
+		token = state.push("toc_close", "nav", -1);
 		token.markup = options.placeholder;
 
 		return true;
 	}
 
-	md.renderer.rules.toc_open = function(/*tokens, idx, options, env, renderer*/) {
+	md.renderer.rules.toc_open = function () /*tokens, idx, options, env, renderer*/{
 		return "<nav role=\"navigation\" class=\"" + htmlencode(options.containerClass) + "\">";
-	}
+	};
 
-	md.renderer.rules.toc_close = function(/*tokens, idx, options, env, renderer*/) {
+	md.renderer.rules.toc_close = function () /*tokens, idx, options, env, renderer*/{
 		return '</nav>';
-	}
+	};
 
-	md.renderer.rules.toc_body = function(/*tokens, idx, options, env, renderer*/) {
-		return ast_html( headings_ast( final_state.tokens ) );
-	}
+	md.renderer.rules.toc_body = function () /*tokens, idx, options, env, renderer*/{
+		return ast_html(headings_ast(final_state.tokens));
+	};
 
 	function ast_html(tree) {
 		var keys = Object.keys(tree);
-		if( keys.length === 0 ) return "";
+		if (keys.length === 0) return "";
 
-		var buffer = ("<" + htmlencode(options.listType) + ">");
-		keys.forEach(function(key){
+		var buffer = "<" + htmlencode(options.listType) + ">";
+		keys.forEach(function (key) {
 			var node = tree[key];
-			buffer += ("<li><a href=\"#" + options.slugify(key) + "\">" + ((typeof options.format === "function" ? options.format(key) : htmlencode(key))) + "</a>" + ast_html(node) + "</li>");
+			buffer += "<li><a href=\"#" + options.slugify(key) + "\">" + (typeof options.format === "function" ? options.format(key) : htmlencode(key)) + "</a>" + ast_html(node) + "</li>";
 		});
-		buffer += ("</" + htmlencode(options.listType) + ">");
+		buffer += "</" + htmlencode(options.listType) + ">";
 
 		return buffer;
 	}
@@ -1279,28 +1277,31 @@ module.exports = function toc_plugin(md, options) {
 		var headings = {};
 		var initial_depth = -1;
 		var stack = [];
-		var depth, latest;
-		for(var i = 0, iK = tokens.length, token; i < iK; i++) {
+		var depth = void 0;
+		var latest = void 0;
+		for (var i = 0, iK = tokens.length, token; i < iK; i++) {
 			token = tokens[i];
-			if(token.type === "heading_open") {
+			if (token.type === "heading_open") {
 				var current_depth = parseInt(token.tag.substr(1), 10);
-				// var current_heading = tokens[i+1].content;
-				var current_heading = tokens[i+1].children
-				                                 .filter(function(token){return token.type === 'text' || token.type === 'code_inline'})
-				                                 .reduce(function(acc, t){return acc + t.content}, '');
+				var current_heading = tokens[i + 1].children.filter(function (token) {
+					return token.type === 'text' || token.type === 'code_inline';
+				}).reduce(function (acc, t) {
+					return acc + t.content;
+				}, '');
 
-				if( initial_depth === -1 ) {
+				if (initial_depth === -1) {
 					initial_depth = current_depth;
 					depth = current_depth;
 					stack.unshift(headings);
 				}
 
-				if( current_depth > depth ) {
+				if (current_depth > depth) {
 					stack.unshift(latest);
 					depth = current_depth;
-				} else if( current_depth < depth ) {
-					for(var j = current_depth, jK = depth; j < jK; j++) stack.shift();
-					depth = current_depth;
+				} else if (current_depth < depth) {
+					for (var j = Math.max(initial_depth, current_depth), jK = depth; j < jK; j++) {
+						stack.shift();
+					}depth = current_depth;
 				}
 				latest = {};
 				stack[0][current_heading] = latest;
@@ -1309,15 +1310,14 @@ module.exports = function toc_plugin(md, options) {
 		return headings;
 	}
 
-	md.core.ruler.push("final_state", function(state){
+	md.core.ruler.push("final_state", function (state) {
 		final_state = state;
 	});
 
 	md.block.ruler.before("heading", "toc", toc, {
-		alt: [ "paragraph", "reference", "blockquote" ]
+		alt: ["paragraph", "reference", "blockquote"]
 	});
-
-}
+};
 
 },{"string":4}]},{},[5])(5)
 });

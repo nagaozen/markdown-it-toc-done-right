@@ -3,22 +3,17 @@
 A table of contents (TOC) plugin for [Markdown-it](https://github.com/markdown-it/markdown-it) with focus on semantic and security. Made to work gracefully with [markdown-it-anchor](https://github.com/valeriangalliat/markdown-it-anchor).
 
 [![NPM version](https://img.shields.io/npm/v/markdown-it-toc-done-right.svg?style=flat)](https://www.npmjs.org/package/markdown-it-toc-done-right)
+[![Try bluestream on RunKit](https://badge.runkitcdn.com/bluestream.svg)](https://npm.runkit.com/bluestream)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 
 ## tl;dr
 
-If you find yourself drowned in table of contents plugins, just pick this one. You won't be wrong.
+If you are drowning in table of contents plugins options, just pick this one. It delivers an **accessible**, **semantic**, **SEO friendly** and **safe** TOC. Place a `${toc}` in your markdown and, BOOM, the `<nav class="table-of-contents">` will be there. [Click here for additional information](#really-another-markdown-it-table-of-contents-plugin).
 
 ## Installation
 
 ```sh
 $ npm i -S markdown-it-toc-done-right markdown-it-anchor
-```
-
-### Unicode support
-
-```sh
-$ npm i -S uslug
 ```
 
 ## Usage
@@ -46,29 +41,9 @@ var md = window.markdownit({
 var result = md.render("# markdown-it rulezz!\n\n${toc}\n## with markdown-it-toc-done-right rulezz even more!");
 ```
 
-Differences in browser. If you load script directly into the page, without package system, module will add itself globally as window.markdownitTocDoneRight.
-
-### Unicode support
-
-By default, neither `markdown-it-anchor` nor `markdown-it-toc-done-right` will work with unicode strings like: 日本語, 한글, 繁体, العربية, עברית. Yet, both plugins expose the option `slugify` which can be used to enhance the plugins with an additional dependency like `uslug`:
-
-```js
-var uslug = require("uslug");
-var uslugify = function(s) {
-	return uslug(s);
-}
-
-var md = require("markdown-it")({
-	html: false,
-	xhtmlOut: true,
-	typographer: true
-}).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify } )
-  .use( require("markdown-it-toc-done-right"), { slugify: uslugify } );
-```
-
 ## Options
 
-You may specify options when useing the plugin:
+You may specify options when using the plugin:
 
 ```js
 md.use(require("markdown-it-toc-done-right"), options);
@@ -96,6 +71,29 @@ function format(x) {
 **IMPORTANT**: `x` parameter holds a is a _verbatim_ copy of the original heading string in the markdown file. Be sure to encode it before printing some code.
 
 [slugify]: http://stringjs.com/#methods/slugify
+
+## Unicode support
+
+By default, neither `markdown-it-anchor` nor `markdown-it-toc-done-right` will work with unicode strings like: 日本語, 한글, 繁体, العربية, עברית. Yet, both plugins expose the option `slugify` which can be used to enhance the plugins with an additional dependency like `uslug`:
+
+```sh
+$ npm i -S uslug
+```
+
+```js
+var uslug = require("uslug");
+
+function uslugify(s) {
+	return uslug(s);
+}
+
+var md = require("markdown-it")({
+	html: false,
+	xhtmlOut: true,
+	typographer: true
+}).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify } )
+  .use( require("markdown-it-toc-done-right"), { slugify: uslugify } );
+```
 
 ## Really? Another markdown-it table of contents plugin?
 
@@ -150,6 +148,6 @@ Want to know more about nested counters? Visit <https://www.w3.org/TR/css-lists-
 
 * ⇄ Pull requests and ★ Stars are always welcome.
 * For bugs and feature requests, please create an issue.
-* Pull requests must be accompanied by passing automated tests (`$ make test`).
+* Pull requests must be accompanied by passing automated tests (`$ npm test`).
 
 **Working on your first Pull Request?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github).

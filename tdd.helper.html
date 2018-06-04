@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>markdown-it-toc-done-right</title>
+
+		<style>
+
+body { scroll-behavior: smooth; }
+/* More about scroll-behavior @ <https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior> */
+
+ol { counter-reset: list-item; }
+li { display: block; counter-increment: list-item; }
+li:before { content: counters(list-item,'.') ' '; }
+/* More about nested counters @ <https://www.w3.org/TR/css-lists-3/> */
+
+		</style>
+
+	</head>
+	<body>
+		<script src="lib/markdown-it.js"></script>
+		<script src="lib/markdown-it-anchor.js"></script>
+		<script src="lib/uslug.js"></script>
+		<script src="dist/markdown-it-toc-made-right.min.js"></script>
+		<!-- text/markdown isn't a standard, but has an informational rfc @ <https://tools.ietf.org/html/rfc7763> -->
+		<script id="md" type="text/markdown">
+${toc}
+
+# > Title
+		</script>
+		<script>
+var uslugify = function(s) {
+	return window.uslug(s);
+}
+
+var md = window.markdownIt();
+md.use(window.markdownItAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify })
+  .use(window.markdownitTocDoneRight, { slugify: uslugify }); 
+document.body.innerHTML = md.render( document.getElementById("md").innerHTML );
+		</script>
+	</body>
+</html>
