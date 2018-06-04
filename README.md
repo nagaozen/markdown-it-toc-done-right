@@ -3,7 +3,7 @@
 A table of contents (TOC) plugin for [Markdown-it](https://github.com/markdown-it/markdown-it) with focus on semantic and security. Made to work gracefully with [markdown-it-anchor](https://github.com/valeriangalliat/markdown-it-anchor).
 
 [![NPM version](https://img.shields.io/npm/v/markdown-it-toc-done-right.svg?style=flat)](https://www.npmjs.org/package/markdown-it-toc-done-right)
-[![Try bluestream on RunKit](https://badge.runkitcdn.com/bluestream.svg)](https://npm.runkit.com/bluestream)
+[![Try markdown-it-toc-done-right on RunKit](https://badge.runkitcdn.com/markdown-it-toc-done-right.svg)](https://npm.runkit.com/markdown-it-toc-done-right)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 
 ## tl;dr
