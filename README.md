@@ -3,7 +3,7 @@
 A table of contents (TOC) plugin for [Markdown-it](https://github.com/markdown-it/markdown-it) with focus on semantic and security. Made to work gracefully with [markdown-it-anchor](https://github.com/valeriangalliat/markdown-it-anchor).
 
 [![Build Status](https://img.shields.io/travis/nagaozen/markdown-it-toc-done-right/master.svg?style=flat)](https://travis-ci.org/nagaozen/markdown-it-toc-done-right)
-[![NPM version](https://img.shields.io/npm/v/markdown-it-toc-done-right.svg?style=flat)](https://www.npmjs.org/package/markdown-it-toc-done-right)
+[![NPM version](https://img.shields.io/npm/v/markdown-it-toc-done-right.svg?style=flat)](vhttps://www.npmjs.org/package/markdown-it-toc-done-right)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 [![Try markdown-it-toc-done-right on RunKit](https://badge.runkitcdn.com/markdown-it-toc-done-right.svg)](https://npm.runkit.com/markdown-it-toc-done-right)
 
@@ -111,14 +111,14 @@ Whenever I need to work with markdown syntax, I leverage Markdown-it. It's GREAT
 1. `(C1)` Invalidates your HTML at [Nu Html Checker](https://validator.w3.org/nu/). Using those plugins you will inject the "ERROR: No `p` element in scope but a `p` end tag seen." to your page.
 1. `(C2)` Throw HTML5 semantics away. One of the reasons for the tag `<nav>` to exists is [exactly to be used as a container for table of contents](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Using_HTML_sections_and_outlines#Problems_solved_by_HTML5). Semantic is great for SEO and Accessibility. If you, like me, care about SEO and Accessibility you can't use those plugins.
 
-Of course that neither of the above arguments degrades your presentation, but as a coach that trains people to be A-grade web developers to work with very sensitive data (_i.e._ money and credit card) it doesn't make sense for me to keep any one of these plugins. Another very common `(C1)` mistake that can be found in the wild is using an optional regular expression to work match the placeholder in the source, but using a hard-coded `charCodeAt` value to reject a token. Finally, `(C3)` is also a concern since the prevalence of unescaped HTML is currently very high; opening your page to XSS and other HTML injection security vulnerabilities.
+Of course that neither of the above arguments degrades your presentation, but as a coach that trains people to be A-grade web developers to work with very sensitive data (_i.e._ money and credit card) it doesn't make sense for me to keep any one of these plugins. Another very common `(C1)` mistake that can be found in the wild is using an optional regular expression to match the placeholder in the source, but using a hard-coded `charCodeAt` value to reject a token. Finally, `(C3)` is also a concern since the prevalence of unescaped HTML is currently very high; opening your page to XSS and other HTML injection security vulnerabilities.
 
 The only other plugin that addresses `(C2)` and `(C3)` found is `markdown-it-toc-x3`. It's made because the author also noted `(C2)` and addresses `(C3)` by always using `markdown-it token.attrSet(k,v)`, but I've technical `(D1)` and philosophical `(D2)` disagreements with the code:
 
 1. `(D1)`, the approach is very obscure: `(i)` cloning the argument `md` into `md2`, using it to render `heading_open next token` into something that needs to be slugified, stripped and will generate more tokens to be concatenated with token.children; `(ii)` hard-coding `<svg>` into it?; `(iii)` building a string representation of the TOC to `md2` parse and get the tokens back? Really? I feel it's a bit hard to maintain code like that. 
 1. `(D2)` composability, do one thing and do it well. If a plugin could be broken in two plugins, it should be broken. `+1` for maintenance.
 
-And those are the "why"s of `markdown-it-toc-done-right`. It protects you by HTML enconding critical points `(C3)` ✓, outputs a nice semantic tag `nav` with an WAI-ARIA landmark `role="navigation"` saving you from [this kind of issue](https://github.com/w3c/aria/issues/534) `(C2)` ✓ and get the job done with an über simple approach `(C1)` ✓.
+And those are the "why"s of `markdown-it-toc-done-right`. It protects you by HTML enconding critical points `(C3)` ✓, outputs a nice semantic tag `nav` which works the same as WAI-ARIA landmark `role="navigation"` saving you from [this kind of issue](https://github.com/w3c/aria/issues/534) `(C2)` ✓ and get the job done with an über simple approach `(C1)` ✓.
 
 ## How it works?
 

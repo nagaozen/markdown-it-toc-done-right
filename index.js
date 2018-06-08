@@ -61,7 +61,7 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	md.renderer.rules.toc_open = function(/*tokens, idx, options, env, renderer*/) {
-		return `<nav role="navigation" class="${htmlencode(options.containerClass)}">`;
+		return `<nav class="${htmlencode(options.containerClass)}">`;
 	}
 
 	md.renderer.rules.toc_close = function(/*tokens, idx, options, env, renderer*/) {
