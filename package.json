@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-toc-done-right",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Table of contents (TOC) for markdown-it markdown parser with focus on semantic and security.",
   "main": "index.js",
   "scripts": {
