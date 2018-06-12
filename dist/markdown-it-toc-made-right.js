@@ -1,4 +1,4 @@
-/*! markdown-it-toc-done-right 1.0.1 https://github.com//nagaozen/markdown-it-toc-done-right @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitTocDoneRight = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*! markdown-it-toc-done-right 1.0.5 https://github.com//nagaozen/markdown-it-toc-done-right @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitTocDoneRight = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 function count(self, substr) {
   var count = 0
   var pos = self.indexOf(substr)
@@ -1248,7 +1248,7 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	md.renderer.rules.toc_open = function () /*tokens, idx, options, env, renderer*/{
-		return "<nav role=\"navigation\" class=\"" + htmlencode(options.containerClass) + "\">";
+		return "<nav class=\"" + htmlencode(options.containerClass) + "\">";
 	};
 
 	md.renderer.rules.toc_close = function () /*tokens, idx, options, env, renderer*/{
@@ -1260,12 +1260,12 @@ module.exports = function toc_plugin(md, options) {
 	};
 
 	function ast_html(tree) {
-		var keys = Object.keys(tree);
+		var keys = Object.keys(tree.c);
 		if (keys.length === 0) return "";
 
 		var buffer = "<" + htmlencode(options.listType) + ">";
 		keys.forEach(function (key) {
-			var node = tree[key];
+			var node = tree.c[key];
 			buffer += "<li><a href=\"#" + options.slugify(key) + "\">" + (typeof options.format === "function" ? options.format(key) : htmlencode(key)) + "</a>" + ast_html(node) + "</li>";
 		});
 		buffer += "</" + htmlencode(options.listType) + ">";
@@ -1274,40 +1274,36 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	function headings_ast(tokens) {
-		var headings = {};
-		var initial_depth = -1;
-		var stack = [];
-		var depth = void 0;
-		var latest = void 0;
-		for (var i = 0, iK = tokens.length, token; i < iK; i++) {
-			token = tokens[i];
+		var ast = { l: 0, n: "", c: {} };
+		var stack = [ast];
+		for (var i = 0, iK = tokens.length; i < iK; i++) {
+			var token = tokens[i];
 			if (token.type === "heading_open") {
-				var current_depth = parseInt(token.tag.substr(1), 10);
-				var current_heading = tokens[i + 1].children.filter(function (token) {
-					return token.type === 'text' || token.type === 'code_inline';
-				}).reduce(function (acc, t) {
-					return acc + t.content;
-				}, '');
+				var node = {
+					l: parseInt(token.tag.substr(1), 10),
+					n: tokens[i + 1].children.filter(function (token) {
+						return token.type === "text" || token.type === "code_inline";
+					}).reduce(function (acc, t) {
+						return acc + t.content;
+					}, ""),
+					c: {}
+				};
 
-				if (initial_depth === -1) {
-					initial_depth = current_depth;
-					depth = current_depth;
-					stack.unshift(headings);
-				}
-
-				if (current_depth > depth) {
-					stack.unshift(latest);
-					depth = current_depth;
-				} else if (current_depth < depth) {
-					for (var j = Math.max(initial_depth, current_depth), jK = depth; j < jK; j++) {
+				if (node.l > stack[0].l) {
+					stack[0].c[node.n] = node;
+					stack.unshift(node);
+				} else if (node.l === stack[0].l) {
+					stack[1].c[node.n] = node;
+					stack[0] = node;
+				} else {
+					while (node.l <= stack[0].l) {
 						stack.shift();
-					}depth = current_depth;
+					}stack[0].c[node.n] = node;
+					stack.unshift(node);
 				}
-				latest = {};
-				stack[0][current_heading] = latest;
 			}
 		}
-		return headings;
+		return ast;
 	}
 
 	md.core.ruler.push("final_state", function (state) {

@@ -73,12 +73,12 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	function ast_html(tree) {
-		const keys = Object.keys(tree);
+		const keys = Object.keys(tree.c);
 		if( keys.length === 0 ) return "";
 
 		let buffer = (`<${htmlencode(options.listType)}>`);
 		keys.forEach(function(key){
-			const node = tree[key];
+			const node = tree.c[key];
 			buffer += (`<li><a href="#${options.slugify(key)}">${typeof options.format === "function" ? options.format(key) : htmlencode(key)}</a>${ast_html(node)}</li>`);
 		});
 		buffer += (`</${htmlencode(options.listType)}>`);
@@ -87,37 +87,33 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	function headings_ast(tokens) {
-		const headings = {};
-		let initial_depth = -1;
-		const stack = [];
-		let depth;
-		let latest;
-		for(let i = 0, iK = tokens.length, token; i < iK; i++) {
-			token = tokens[i];
+		const ast   = { l: 0, n: "", c: {} };
+		const stack = [ast];
+		for(let i = 0, iK = tokens.length; i < iK; i++) {
+			const token = tokens[i];
 			if(token.type === "heading_open") {
-				const current_depth = parseInt(token.tag.substr(1), 10);
-				const current_heading = tokens[i+1].children
-				                                   .filter(function(token){return token.type === 'text' || token.type === 'code_inline'})
-				                                   .reduce(function(acc, t){return acc + t.content}, '');
+				const node = {
+					l: parseInt(token.tag.substr(1), 10),
+					n: ( tokens[i+1].children
+					                .filter(function(token){return token.type === "text" || token.type === "code_inline"})
+					                .reduce(function(acc, t){return acc + t.content}, "") ),
+					c: {}
+				};
 
-				if( initial_depth === -1 ) {
-					initial_depth = current_depth;
-					depth = current_depth;
-					stack.unshift(headings);
+				if( node.l > stack[0].l ) {
+					stack[0].c[node.n] = node;
+					stack.unshift(node);
+				} else if( node.l === stack[0].l ) {
+					stack[1].c[node.n] = node;
+					stack[0] = node;
+				} else {
+					while( node.l <= stack[0].l ) stack.shift();
+					stack[0].c[node.n] = node;
+					stack.unshift(node);
 				}
-
-				if( current_depth > depth ) {
-					stack.unshift(latest);
-					depth = current_depth;
-				} else if( current_depth < depth ) {
-					for(let j = Math.max(initial_depth, current_depth), jK = depth; j < jK; j++) stack.shift();
-					depth = current_depth;
-				}
-				latest = {};
-				stack[0][current_heading] = latest;
 			}
 		}
-		return headings;
+		return ast;
 	}
 
 	md.core.ruler.push("final_state", function(state){

@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-toc-done-right",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Table of contents (TOC) for markdown-it markdown parser with focus on semantic and security.",
   "main": "index.js",
   "scripts": {
@@ -45,7 +45,7 @@
       "import/order": 0,
       "no-mixed-spaces-and-tabs": 0,
       "import/newline-after-import": 0,
-      "import/no-unresolved": 1
+      "import/no-unresolved": 0
     }
   },
   "jest": {
@@ -63,9 +63,11 @@
     "eslint": "^4.19.1",
     "eslint-config-i-am-meticulous": "^8.0.0",
     "jest": "^23.1.0",
-    "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^4.0.0",
     "uglify-js": "^3.4.0",
     "uslug": "^1.0.4"
+  },
+  "peerDependencies": {
+    "markdown-it": "^8.4.1"
   }
 }
