@@ -63,6 +63,7 @@
     "eslint": "^4.19.1",
     "eslint-config-i-am-meticulous": "^8.0.0",
     "jest": "^23.1.0",
+    "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^4.0.0",
     "uglify-js": "^3.4.0",
     "uslug": "^1.0.4"
