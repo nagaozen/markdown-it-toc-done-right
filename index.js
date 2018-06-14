@@ -1,26 +1,29 @@
 "use strict"
 
-const S = require("string");
+function slugify(x) {
+	return encodeURIComponent(String(x).trim().toLowerCase().replace(/\s+/g, '-'));
+}
 
 function htmlencode(x) {
-	// safest, delegate task to native -- IMPORTANT: enabling this breaks both jest and runkit
+	// safest, delegate task to native -- IMPORTANT: enabling this breaks both jest and runkit, but with browserify it's fine
 /*	if(document && document.createElement) {
 		const el = document.createElement("div");
 		el.innerText = x;
 		return el.innerHTML;
 	}*/
 
-	// string.js uses a hard-coded list of entities based on underscore.string, so it's possible that something is missing out.
-	return S(x).escapeHTML();
+	return String(x).replace(/&/g, "&amp;")
+	                .replace(/"/g, "&quot;")
+	                .replace(/'/g, "&#39;")
+	                .replace(/</g, "&lt;")
+	                .replace(/>/g, "&gt;");
 }
 
 module.exports = function toc_plugin(md, options) {
 
 	options = Object.assign({}, {
 		placeholder: "${toc}",
-		slugify: function(s) {
-			return S(s).slugify().toString();
-		},
+		slugify: slugify,
 		containerClass: "table-of-contents",
 		listType: "ol",
 		format: undefined

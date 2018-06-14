@@ -55,7 +55,7 @@ These options are available:
 Name              | Description                                                | Default
 ------------------|------------------------------------------------------------|------------------------------------
 "placeholder"     | The string serving as the TOC placeholder in your markdown | "${toc}"
-"slugify"         | A custom slugification function                            | [string.js' `slugify`][slugify]
+"slugify"         | A custom slugification function                            | See [`index.js`](index.js)
 "containerClass"  | The class for the container DIV                            | "table-of-contents"
 "listType"        | Type of list (`ul` for unordered, `ol` for ordered)        | `ol`
 "format"          | A function for formatting headings (see below)             | `undefined`
@@ -69,13 +69,35 @@ function format(x) {
 }
 ```
 
-**IMPORTANT**: `x` parameter holds a is a _verbatim_ copy of the original heading string in the markdown file. Be sure to encode it before printing some code.
+## User-Friendly URLs
 
-[slugify]: http://stringjs.com/#methods/slugify
+Starting from `v2.0.0`, `markdown-it-toc-done-right` dropped support for `string`
+keeping it's core value of being an unopinionated and secure library. Yet,
+users looking for backward compatibility may want the old slugify:
+
+```sh
+$ npm i -S string
+```
+
+```js
+var string = require("string");
+
+function legacySlugify(s) {
+	return string(s).slugify().toString();
+}
+
+var md = require("markdown-it")({
+	html: false,
+	xhtmlOut: true,
+	typographer: true
+}).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: legacySlugify } )
+  .use( require("markdown-it-toc-done-right"), { slugify: legacySlugify } );
+```
 
 ## Unicode support
 
-By default, neither `markdown-it-anchor` nor `markdown-it-toc-done-right` will work with unicode strings like: 日本語, 한글, 繁体, العربية, עברית. Yet, both plugins expose the option `slugify` which can be used to enhance the plugins with an additional dependency like `uslug`:
+Unicode is supported by default. Yet, if you are looking for a "prettier"
+--opinionated-- link, _i.e_ without %xx, you may want to take a look at `uslug`:
 
 ```sh
 $ npm i -S uslug

@@ -52,9 +52,9 @@ test("markup in the heading should be treated", () => {
 });
 
 test("especially < and >", () => {
-	expect( md.render("${toc}\n\n# > Title\n\n## < Section\n\n## > Another Section") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#title"> &gt; Title</a><ol><li><a href="#section"> &lt; Section</a></li><li><a href="#another-section"> &gt; Another Section</a></li></ol></li></ol></nav><h1 id="title"><a class="header-anchor" href="#title" aria-hidden="true">§</a> &gt; Title</h1>
-<h2 id="section"><a class="header-anchor" href="#section" aria-hidden="true">§</a> &lt; Section</h2>
-<h2 id="another-section"><a class="header-anchor" href="#another-section" aria-hidden="true">§</a> &gt; Another Section</h2>
+	expect( md.render("${toc}\n\n# > Title\n\n## < Section\n\n## > Another Section") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#%3E-title"> &gt; Title</a><ol><li><a href="#%3C-section"> &lt; Section</a></li><li><a href="#%3E-another-section"> &gt; Another Section</a></li></ol></li></ol></nav><h1 id="%3E-title"><a class="header-anchor" href="#%3E-title" aria-hidden="true">§</a> &gt; Title</h1>
+<h2 id="%3C-section"><a class="header-anchor" href="#%3C-section" aria-hidden="true">§</a> &lt; Section</h2>
+<h2 id="%3E-another-section"><a class="header-anchor" href="#%3E-another-section" aria-hidden="true">§</a> &gt; Another Section</h2>
 `);
 });
 
