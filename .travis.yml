@@ -3,6 +3,7 @@ node_js:
   - "7"
   - "8"
   - "9"
+after_success: make report-coverage
 cache:
   directories:
     - "node_modules"
