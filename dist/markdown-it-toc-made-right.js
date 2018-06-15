@@ -28,20 +28,20 @@ module.exports = function toc_plugin(md, options) {
 
 	var final_state = void 0;
 
-	function toc(state, startLine, endLine, silent) {
+	function toc(state, startLine /*, endLine, silent*/) {
 		var token = void 0;
 		var pos = state.bMarks[startLine] + state.tShift[startLine];
 		var max = state.eMarks[startLine];
 
 		// if it's indented more than 3 spaces, it should be a code block
-		if (state.sCount[startLine] - state.blkIndent >= 4) return false;
+		/*if(state.sCount[startLine] - state.blkIndent >= 4) return false;*/
 
 		// check starting chars and reject fast if they doesn't match
 		for (var i = 0, len = options.placeholder.length; i < len; i++) {
 			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
 		}
 
-		if (silent) return true;
+		/*if(silent) return true;*/
 
 		state.line = startLine + 1;
 
@@ -72,14 +72,21 @@ module.exports = function toc_plugin(md, options) {
 		return ast_html(headings_ast(final_state.tokens));
 	};
 
-	function ast_html(tree) {
+	function ast_html(tree, uniques) {
+		uniques = uniques || {};
+		function unique(s) {
+			if (uniques.hasOwnProperty(s)) return s + "-" + ++uniques[s];
+			uniques[s] = 1;
+			return s;
+		}
+
 		var keys = Object.keys(tree.c);
 		if (keys.length === 0) return "";
 
 		var buffer = "<" + htmlencode(options.listType) + ">";
 		keys.forEach(function (key) {
 			var node = tree.c[key];
-			buffer += "<li><a href=\"#" + options.slugify(key) + "\">" + (typeof options.format === "function" ? options.format(key) : htmlencode(key)) + "</a>" + ast_html(node) + "</li>";
+			buffer += "<li><a href=\"#" + unique(options.slugify(key)) + "\">" + (typeof options.format === "function" ? options.format(key, htmlencode) : htmlencode(key)) + "</a>" + ast_html(node, uniques) + "</li>";
 		});
 		buffer += "</" + htmlencode(options.listType) + ">";
 
