@@ -3,7 +3,7 @@ node_js:
   - "7"
   - "8"
   - "9"
-after_success: "cat ./coverage/lcov.info | npx coveralls"
+after_success: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 cache:
   directories:
     - "node_modules"
