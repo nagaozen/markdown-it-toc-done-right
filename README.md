@@ -3,6 +3,7 @@
 A table of contents (TOC) plugin for [Markdown-it](https://github.com/markdown-it/markdown-it) with focus on semantic and security. Made to work gracefully with [markdown-it-anchor](https://github.com/valeriangalliat/markdown-it-anchor).
 
 [![Build Status](https://img.shields.io/travis/nagaozen/markdown-it-toc-done-right/master.svg?style=flat)](https://travis-ci.org/nagaozen/markdown-it-toc-done-right)
+[![Coverage Status](https://coveralls.io/repos/github/nagaozen/markdown-it-toc-done-right/badge.svg?branch=master)](https://coveralls.io/github/nagaozen/markdown-it-toc-done-right?branch=master)
 [![NPM version](https://img.shields.io/npm/v/markdown-it-toc-done-right.svg?style=flat)](vhttps://www.npmjs.org/package/markdown-it-toc-done-right)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 [![Try markdown-it-toc-done-right on RunKit](https://badge.runkitcdn.com/markdown-it-toc-done-right.svg)](https://npm.runkit.com/markdown-it-toc-done-right)
