@@ -61,12 +61,11 @@ Name              | Description                                                |
 "listType"        | Type of list (`ul` for unordered, `ol` for ordered)        | `ol`
 "format"          | A function for formatting headings (see below)             | `undefined`
 
-`format` is an optional function for changing how the headings are displayed in the TOC.
+`format` is an optional function for changing how the headings are displayed in the TOC _e.g._ Wrapping content in `<span>`:
 
 ```js
-function format(x) {
-	// define T(x)
-	return T(x);
+function format(x, htmlencode) {
+	return `<span>${htmlencode(x)}</span>`;
 }
 ```
 
