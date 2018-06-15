@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
