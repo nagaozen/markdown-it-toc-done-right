@@ -71,7 +71,7 @@ function format(x, htmlencode) {
 
 ## User-Friendly URLs
 
-Starting from `v2.0.0`, `markdown-it-toc-done-right` dropped support for `string`
+Starting from `v2.0.0`, `markdown-it-toc-done-right` dropped package `string`
 keeping it's core value of being an unopinionated and secure library. Yet,
 users looking for backward compatibility may want the old slugify:
 
