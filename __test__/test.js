@@ -112,6 +112,13 @@ test("headers innerText may happen more than once", () => {
 `);
 });
 
+test("and sometimes slugify with suffix may generate another existing header", () => {
+	expect( md.render("${toc}\n\n# header\n\n## header\n\n## header 2") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-2"> header</a></li><li><a href="#header-2-2"> header 2</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header" aria-hidden="true">§</a> header</h1>
+<h2 id="header-2"><a class="header-anchor" href="#header-2" aria-hidden="true">§</a> header</h2>
+<h2 id="header-2-2"><a class="header-anchor" href="#header-2-2" aria-hidden="true">§</a> header 2</h2>
+`);
+});
+
 test("all options should work as expected", () => {
 	expect( umd.render("@[[TOC]]\n\n# 日本語") ).toBe('<nav class="user-content-toc"><ul><li><a href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n');
 });

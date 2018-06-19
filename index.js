@@ -44,7 +44,7 @@ module.exports = function toc_plugin(md, options) {
 			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
 		}
 
-		/*if(silent) return true;*/
+//		if(silent) return true;
 
 		state.line = startLine + 1;
 
@@ -78,9 +78,11 @@ module.exports = function toc_plugin(md, options) {
 	function ast_html(tree, uniques) {
 		uniques = uniques || {};
 		function unique(s) {
-			if( uniques.hasOwnProperty(s) ) return `${s}-${++uniques[s]}`;
-			uniques[s] = 1;
-			return s;
+			let u = s;
+			let i = 2;
+			while (uniques.hasOwnProperty(u)) u = `${s}-${i++}`;
+			uniques[u] = true;
+			return u;
 		}
 
 		const keys = Object.keys(tree.c);

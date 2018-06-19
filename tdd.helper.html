@@ -19,7 +19,7 @@ li:before { content: counters(list-item,'.') ' '; }
 
 	</head>
 	<body>
-		<script src="lib/markdown-it.js"></script>
+		<script src="https://unpkg.com/markdown-it@8.4.1/dist/markdown-it.min.js"></script>
 		<script src="lib/markdown-it-anchor.js"></script>
 		<script src="lib/uslug.js"></script>
 		<script src="dist/markdown-it-toc-made-right.min.js"></script>
@@ -27,32 +27,18 @@ li:before { content: counters(list-item,'.') ' '; }
 		<script id="md" type="text/markdown">
 ${toc}
 
-# Title
+# header
 
-## Section 1
+## header
 
-### Subsection 1
-
-### Subsection 2
-
-## Section 2
-
-### Subsection 1
-
-### Subsection 2
-
-## Section 3
-
-### Subsection 1
-
-### Subsection 2
+## header 2
 		</script>
 		<script>
 /*var uslugify = function(s) {
 	return window.uslug(s);
 }*/
 
-var md = window.markdownIt();
+var md = window.markdownit();
 md.use(window.markdownItAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§'/*, slugify: uslugify*/ })
   .use(window.markdownitTocDoneRight, { /*slugify: uslugify*/ }); 
 document.body.innerHTML = md.render( document.getElementById("md").innerHTML );

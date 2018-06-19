@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.3] - 2018-06-19
+### Changed
+- update to keep compat with `markdown-it-anchor` `v5.0.2`
+
 ## [2.0.2] - 2018-06-15
 ### Changed
 - tests cover 100%

@@ -1,4 +1,4 @@
-/*! markdown-it-toc-done-right 2.0.0 https://github.com//nagaozen/markdown-it-toc-done-right @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitTocDoneRight = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*! markdown-it-toc-done-right 2.0.2 https://github.com//nagaozen/markdown-it-toc-done-right @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitTocDoneRight = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
 function slugify(x) {
@@ -28,7 +28,7 @@ module.exports = function toc_plugin(md, options) {
 
 	var final_state = void 0;
 
-	function toc(state, startLine /*, endLine, silent*/) {
+	function toc(state, startLine, endLine, silent) {
 		var token = void 0;
 		var pos = state.bMarks[startLine] + state.tShift[startLine];
 		var max = state.eMarks[startLine];
@@ -41,21 +41,21 @@ module.exports = function toc_plugin(md, options) {
 			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
 		}
 
-		/*if(silent) return true;*/
+		if (!silent) {
+			state.line = startLine + 1;
 
-		state.line = startLine + 1;
+			token = state.push("toc_open", "nav", 1);
+			token.markup = options.placeholder;
+			token.map = [startLine, state.line];
 
-		token = state.push("toc_open", "nav", 1);
-		token.markup = options.placeholder;
-		token.map = [startLine, state.line];
+			token = state.push("toc_body", "", 0);
+			token.markup = options.placeholder;
+			token.map = [startLine, state.line];
+			token.children = [];
 
-		token = state.push("toc_body", "", 0);
-		token.markup = options.placeholder;
-		token.map = [startLine, state.line];
-		token.children = [];
-
-		token = state.push("toc_close", "nav", -1);
-		token.markup = options.placeholder;
+			token = state.push("toc_close", "nav", -1);
+			token.markup = options.placeholder;
+		}
 
 		return true;
 	}
@@ -75,9 +75,12 @@ module.exports = function toc_plugin(md, options) {
 	function ast_html(tree, uniques) {
 		uniques = uniques || {};
 		function unique(s) {
-			if (uniques.hasOwnProperty(s)) return s + "-" + ++uniques[s];
-			uniques[s] = 1;
-			return s;
+			var u = s;
+			var i = 2;
+			while (uniques.hasOwnProperty(u)) {
+				u = s + "-" + i++;
+			}uniques[u] = true;
+			return u;
 		}
 
 		var keys = Object.keys(tree.c);

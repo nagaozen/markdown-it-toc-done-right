@@ -20,6 +20,5 @@ build:
 upddemo:
 	rm -rf ./lib
 	mkdir lib
-	curl -o lib/markdown-it.js https://wzrd.in/standalone/markdown-it@latest
 	curl -o lib/markdown-it-anchor.js https://wzrd.in/standalone/markdown-it-anchor@latest
 	curl -o lib/uslug.js https://wzrd.in/standalone/uslug@latest
