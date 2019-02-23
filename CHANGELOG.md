@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.1.0] - 2019-02-23
+### Added
+- `level` option. Default is 1
+- test for using `level` option
+### Changed
+- update `demo.html` to test the new level option
+
 ## [2.0.3] - 2018-06-19
 ### Changed
 - update to keep compat with `markdown-it-anchor` `v5.0.2`
@@ -16,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.0.0] - 2018-06-14
 ### Changed
-- dropped package `string` as dependency.
+- dropped package `string` as dependency
 
 ## [1.0.5] - 2018-06-12
 ### Added
@@ -39,12 +46,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.0.1] - 2018-06-04
 ### Added
-- linting 
+- linting
 - testing
 - runkit
 - unicode support example
 
-[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.2...HEAD
+[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.3...v2.1.0
+[2.0.3]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.0...v2.0.2
 [2.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v1.0.5...v2.0.0
 [1.0.5]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v1.0.4...v1.0.5

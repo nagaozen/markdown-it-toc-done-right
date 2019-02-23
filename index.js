@@ -25,6 +25,7 @@ module.exports = function toc_plugin(md, options) {
 		placeholder: "${toc}",
 		slugify: slugify,
 		containerClass: "table-of-contents",
+		level: 1,
 		listType: "ol",
 		format: undefined
 	}, options);
@@ -40,7 +41,7 @@ module.exports = function toc_plugin(md, options) {
 		/*if(state.sCount[startLine] - state.blkIndent >= 4) return false;*/
 
 		// check starting chars and reject fast if they doesn't match
-		for(let i = 0, len = options.placeholder.length; i < len; i++) {
+		for (let i = 0, len = options.placeholder.length; i < len; i++) {
 			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
 		}
 
@@ -86,7 +87,7 @@ module.exports = function toc_plugin(md, options) {
 		}
 
 		const keys = Object.keys(tree.c);
-		if( keys.length === 0 ) return "";
+		if ( keys.length === 0 ) return "";
 
 		let buffer = (`<${htmlencode(options.listType)}>`);
 		keys.forEach(function(key){
@@ -101,7 +102,7 @@ module.exports = function toc_plugin(md, options) {
 	function headings_ast(tokens) {
 		const ast   = { l: 0, n: "", c: {} };
 		const stack = [ast];
-		for(let i = 0, iK = tokens.length; i < iK; i++) {
+		for (let i = 0, iK = tokens.length; i < iK; i++) {
 			const token = tokens[i];
 			if(token.type === "heading_open") {
 				const node = {
@@ -112,16 +113,18 @@ module.exports = function toc_plugin(md, options) {
 					c: {}
 				};
 
-				if( node.l > stack[0].l ) {
-					stack[0].c[node.n] = node;
-					stack.unshift(node);
-				} else if( node.l === stack[0].l ) {
-					stack[1].c[node.n] = node;
-					stack[0] = node;
-				} else {
-					while( node.l <= stack[0].l ) stack.shift();
-					stack[0].c[node.n] = node;
-					stack.unshift(node);
+				if (node.l >= options.level) {
+					if ( node.l > stack[0].l ) {
+						stack[0].c[node.n] = node;
+						stack.unshift(node);
+					} else if ( node.l === stack[0].l ) {
+						stack[1].c[node.n] = node;
+						stack[0] = node;
+					} else {
+						while( node.l <= stack[0].l ) stack.shift();
+						stack[0].c[node.n] = node;
+						stack.unshift(node);
+					}
 				}
 			}
 		}

@@ -53,13 +53,14 @@ md.use(require("markdown-it-toc-done-right"), options);
 
 These options are available:
 
-Name              | Description                                                | Default
-------------------|------------------------------------------------------------|------------------------------------
-"placeholder"     | The string serving as the TOC placeholder in your markdown | "${toc}"
-"slugify"         | A custom slugification function                            | See [`index.js`](index.js)
-"containerClass"  | The class for the container DIV                            | "table-of-contents"
-"listType"        | Type of list (`ul` for unordered, `ol` for ordered)        | `ol`
-"format"          | A function for formatting headings (see below)             | `undefined`
+Name              | Description                                                   | Default
+------------------|---------------------------------------------------------------|------------------------------------
+"placeholder"     | The string serving as the TOC placeholder in your markdown    | "${toc}"
+"slugify"         | A custom slugification function                               | See [`index.js`](index.js)
+"containerClass"  | The class for the container DIV                               | "table-of-contents"
+"level"           | Minimum level to apply anchors on or array of selected levels | 1
+"listType"        | Type of list (`ul` for unordered, `ol` for ordered)           | `ol`
+"format"          | A function for formatting headings (see below)                | `undefined`
 
 `format` is an optional function for changing how the headings are displayed in the TOC _e.g._ Wrapping content in `<span>`:
 

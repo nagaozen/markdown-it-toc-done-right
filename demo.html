@@ -19,7 +19,7 @@ li:before { content: counters(list-item,'.') ' '; }
 
 	</head>
 	<body>
-		<script src="https://unpkg.com/markdown-it@8.4.1/dist/markdown-it.min.js"></script>
+		<script src="https://unpkg.com/markdown-it/dist/markdown-it.min.js"></script>
 		<script src="lib/markdown-it-anchor.js"></script>
 		<script src="lib/uslug.js"></script>
 		<script src="dist/markdown-it-toc-made-right.min.js"></script>
@@ -198,9 +198,9 @@ var uslugify = function(s) {
 	return window.uslug(s);
 }
 
-var md = window.markdownIt();
-md.use(window.markdownItAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify })
-  .use(window.markdownitTocDoneRight, { slugify: uslugify }); 
+var md = window.markdownit();
+md.use(window.markdownItAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify/*, level: 2*/ })
+  .use(window.markdownitTocDoneRight, { slugify: uslugify/*, level: 2*/ }); 
 document.body.innerHTML = md.render( document.getElementById("md").innerHTML );
 		</script>
 	</body>
