@@ -21,7 +21,16 @@ const umd = require("markdown-it")({
 	xhtmlOut: true,
 	typographer: true
 }).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify } )
-  .use( require("../index.js"), { placeholder: "@[[TOC]]", slugify: uslugify, containerClass: "user-content-toc", listType: "ul", format: custom_format } );
+  .use( require("../index.js"), {
+	placeholder: "\\@\\[\\[TOC\\]\\]",
+	slugify: uslugify,
+	containerClass: "user-content-toc",
+	listClass: "my-list",
+	itemClass: "my-item",
+	linkClass: "my-link",
+	listType: "ul",
+	format: custom_format
+} );
 
 
 
@@ -100,7 +109,7 @@ test("skipping heading ranks should work", () => {
 })
 
 test("code blocks should not be confused as headings", () => {
-	expect( md.render("${toc}\n\n## Foo\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus porta nulla id porttitor. Vivamus sagittis, leo eget gravida euismod, justo ex dignissim sem, in tempus turpis libero quis velit. Aliquam sit amet ultricies quam.\n\n#### Bar\nSuspendisse ornare pellentesque nibh non tristique. Suspendisse potenti. Nunc id dui non diam luctus imperdiet.\n\n    ## Grob\n    Quisque fringilla urna sit amet elit ultrices tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. In posuere tellus suscipit sapien rhoncus euismod. Phasellus eu ligula mollis, finibus tortor ut, consectetur metus. Vestibulum eget leo felis.") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#foo"> Foo</a><ol><li><a href="#bar"> Bar</a></li></ol></li></ol></nav><h2 id="foo"><a class="header-anchor" href="#foo" aria-hidden="true">§</a> Foo</h2>
+	expect( md.render("[[_toc_]]\n\n## Foo\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus porta nulla id porttitor. Vivamus sagittis, leo eget gravida euismod, justo ex dignissim sem, in tempus turpis libero quis velit. Aliquam sit amet ultricies quam.\n\n#### Bar\nSuspendisse ornare pellentesque nibh non tristique. Suspendisse potenti. Nunc id dui non diam luctus imperdiet.\n\n    ## Grob\n    Quisque fringilla urna sit amet elit ultrices tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. In posuere tellus suscipit sapien rhoncus euismod. Phasellus eu ligula mollis, finibus tortor ut, consectetur metus. Vestibulum eget leo felis.") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#foo"> Foo</a><ol><li><a href="#bar"> Bar</a></li></ol></li></ol></nav><h2 id="foo"><a class="header-anchor" href="#foo" aria-hidden="true">§</a> Foo</h2>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus porta nulla id porttitor. Vivamus sagittis, leo eget gravida euismod, justo ex dignissim sem, in tempus turpis libero quis velit. Aliquam sit amet ultricies quam.</p>
 <h4 id="bar"><a class="header-anchor" href="#bar" aria-hidden="true">§</a> Bar</h4>
 <p>Suspendisse ornare pellentesque nibh non tristique. Suspendisse potenti. Nunc id dui non diam luctus imperdiet.</p>
@@ -110,7 +119,7 @@ Quisque fringilla urna sit amet elit ultrices tincidunt. Interdum et malesuada f
 });
 
 test("headers innerText may happen more than once", () => {
-	expect( md.render("${toc}\n\n# Title\n\n## Section 1\n\n### Subsection 1\n\n### Subsection 2\n\n## Section 2\n\n### Subsection 1\n\n### Subsection 2\n\n## Section 3\n\n### Subsection 1\n\n### Subsection 2") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#title"> Title</a><ol><li><a href="#section-1"> Section 1</a><ol><li><a href="#subsection-1"> Subsection 1</a></li><li><a href="#subsection-2"> Subsection 2</a></li></ol></li><li><a href="#section-2"> Section 2</a><ol><li><a href="#subsection-1-2"> Subsection 1</a></li><li><a href="#subsection-2-2"> Subsection 2</a></li></ol></li><li><a href="#section-3"> Section 3</a><ol><li><a href="#subsection-1-3"> Subsection 1</a></li><li><a href="#subsection-2-3"> Subsection 2</a></li></ol></li></ol></li></ol></nav><h1 id="title"><a class="header-anchor" href="#title" aria-hidden="true">§</a> Title</h1>
+	expect( md.render("[toc]\n\n# Title\n\n## Section 1\n\n### Subsection 1\n\n### Subsection 2\n\n## Section 2\n\n### Subsection 1\n\n### Subsection 2\n\n## Section 3\n\n### Subsection 1\n\n### Subsection 2") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#title"> Title</a><ol><li><a href="#section-1"> Section 1</a><ol><li><a href="#subsection-1"> Subsection 1</a></li><li><a href="#subsection-2"> Subsection 2</a></li></ol></li><li><a href="#section-2"> Section 2</a><ol><li><a href="#subsection-1-2"> Subsection 1</a></li><li><a href="#subsection-2-2"> Subsection 2</a></li></ol></li><li><a href="#section-3"> Section 3</a><ol><li><a href="#subsection-1-3"> Subsection 1</a></li><li><a href="#subsection-2-3"> Subsection 2</a></li></ol></li></ol></li></ol></nav><h1 id="title"><a class="header-anchor" href="#title" aria-hidden="true">§</a> Title</h1>
 <h2 id="section-1"><a class="header-anchor" href="#section-1" aria-hidden="true">§</a> Section 1</h2>
 <h3 id="subsection-1"><a class="header-anchor" href="#subsection-1" aria-hidden="true">§</a> Subsection 1</h3>
 <h3 id="subsection-2"><a class="header-anchor" href="#subsection-2" aria-hidden="true">§</a> Subsection 2</h3>
@@ -124,7 +133,7 @@ test("headers innerText may happen more than once", () => {
 });
 
 test("and sometimes slugify with suffix may generate another existing header", () => {
-	expect( md.render("${toc}\n\n# header\n\n## header\n\n## header 2") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-2"> header</a></li><li><a href="#header-2-2"> header 2</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header" aria-hidden="true">§</a> header</h1>
+	expect( md.render("[[toc]]\n\n# header\n\n## header\n\n## header 2") ).toBe(`<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-2"> header</a></li><li><a href="#header-2-2"> header 2</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header" aria-hidden="true">§</a> header</h1>
 <h2 id="header-2"><a class="header-anchor" href="#header-2" aria-hidden="true">§</a> header</h2>
 <h2 id="header-2-2"><a class="header-anchor" href="#header-2-2" aria-hidden="true">§</a> header 2</h2>
 `);
@@ -138,5 +147,5 @@ test("level option should work as expected", () => {
 });
 
 test("all other options should work as expected", () => {
-	expect( umd.render("@[[TOC]]\n\n# 日本語") ).toBe('<nav class="user-content-toc"><ul><li><a href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n');
+	expect( umd.render("@[[TOC]]\n\n# 日本語") ).toBe('<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n');
 });

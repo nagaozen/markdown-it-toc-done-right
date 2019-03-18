@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.0] - 2019-03-18
+### Added
+- `listClass`, `itemClass` and `linkClass` options.
+### Changed
+- placeholder as a regular expression pattern
+
 ## [2.1.0] - 2019-02-23
 ### Added
 - `level` option. Default is 1
@@ -51,7 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - runkit
 - unicode support example
 
-[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.3...v2.1.0
 [2.0.3]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.0...v2.0.2

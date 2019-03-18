@@ -22,15 +22,19 @@ function htmlencode(x) {
 module.exports = function toc_plugin(md, options) {
 
 	options = Object.assign({}, {
-		placeholder: "${toc}",
+		placeholder: "(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\])",
 		slugify: slugify,
 		containerClass: "table-of-contents",
+		listClass: undefined,
+		itemClass: undefined,
+		linkClass: undefined,
 		level: 1,
 		listType: "ol",
 		format: undefined
 	}, options);
 
-	let final_state;
+	let ast;
+	const pattern = new RegExp("^" + options.placeholder + "$", "i");
 
 	function toc(state, startLine/*, endLine, silent*/) {
 		let token;
@@ -40,26 +44,26 @@ module.exports = function toc_plugin(md, options) {
 		// if it's indented more than 3 spaces, it should be a code block
 		/*if(state.sCount[startLine] - state.blkIndent >= 4) return false;*/
 
-		// check starting chars and reject fast if they doesn't match
-		for (let i = 0, len = options.placeholder.length; i < len; i++) {
-			if (state.src.charCodeAt(pos + i) !== options.placeholder.charCodeAt(i) || pos >= max) return false;
-		}
+		// use whitespace as a line tokenizer and extract the first token
+		// to test against the placeholder anchored pattern, rejecting if false
+		const line_first_token = state.src.slice(pos, max).split(" ")[0];
+		if (!pattern.test(line_first_token)) return false;
 
 //		if(silent) return true;
 
 		state.line = startLine + 1;
 
 		token        = state.push("toc_open", "nav", 1);
-		token.markup = options.placeholder;
+		token.markup = "";
 		token.map    = [ startLine, state.line ];
 
 		token          = state.push("toc_body", "", 0);
-		token.markup   = options.placeholder;
+		token.markup   = "";
 		token.map      = [ startLine, state.line ];
 		token.children = [];
 
 		token        = state.push("toc_close", "nav", -1);
-		token.markup = options.placeholder;
+		token.markup = "";
 
 		return true;
 	}
@@ -73,7 +77,7 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	md.renderer.rules.toc_body = function(/*tokens, idx, options, env, renderer*/) {
-		return ast_html( headings_ast( final_state.tokens ) );
+		return ast_html(ast);
 	}
 
 	function ast_html(tree, uniques) {
@@ -86,13 +90,23 @@ module.exports = function toc_plugin(md, options) {
 			return u;
 		}
 
+		const list_class = options.listClass
+		                 ? ` class="${htmlencode(options.listClass)}"`
+		                 : "";
+		const item_class = options.itemClass
+		                 ? ` class="${htmlencode(options.itemClass)}"`
+		                 : "";
+		const link_class = options.linkClass
+		                 ? ` class="${htmlencode(options.linkClass)}"`
+		                 : "";
+
 		const keys = Object.keys(tree.c);
 		if ( keys.length === 0 ) return "";
 
-		let buffer = (`<${htmlencode(options.listType)}>`);
+		let buffer = (`<${htmlencode(options.listType) + list_class}>`);
 		keys.forEach(function(key){
 			const node = tree.c[key];
-			buffer += (`<li><a href="#${unique(options.slugify(key))}">${typeof options.format === "function" ? options.format(key,htmlencode) : htmlencode(key)}</a>${ast_html(node, uniques)}</li>`);
+			buffer += (`<li${item_class}><a${link_class} href="#${unique(options.slugify(key))}">${typeof options.format === "function" ? options.format(key,htmlencode) : htmlencode(key)}</a>${ast_html(node, uniques)}</li>`);
 		});
 		buffer += (`</${htmlencode(options.listType)}>`);
 
@@ -131,8 +145,9 @@ module.exports = function toc_plugin(md, options) {
 		return ast;
 	}
 
-	md.core.ruler.push("final_state", function(state){
-		final_state = state;
+	md.core.ruler.push("generate_toc_ast", function(state){
+		const tokens = state.tokens;
+		ast = headings_ast(tokens);
 	});
 
 	md.block.ruler.before("heading", "toc", toc, {
