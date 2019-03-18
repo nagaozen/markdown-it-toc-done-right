@@ -21,7 +21,7 @@ const umd = require("markdown-it")({
 	xhtmlOut: true,
 	typographer: true
 }).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify } )
-  .use( require("../index.js"), { placeholder: "@[[TOC]]", slugify: uslugify, containerClass: "user-content-toc", listType: "ul", format: custom_format } );
+  .use( require("../index.js"), { placeholder: "@[[TOC]]", slugify: uslugify, containerClass: "user-content-toc", listType: "ul", format: custom_format, listClass:"toc-list",listElementClass:"toc-list-element", linkClass:"toc-link" } );
 
 
 
@@ -138,5 +138,5 @@ test("level option should work as expected", () => {
 });
 
 test("all other options should work as expected", () => {
-	expect( umd.render("@[[TOC]]\n\n# 日本語") ).toBe('<nav class="user-content-toc"><ul><li><a href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n');
+	expect( umd.render("@[[TOC]]\n\n# 日本語") ).toBe('<nav class="user-content-toc"><ul class="toc-list"><li class="toc-list-element"><a href="#日本語" class="toc-link"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n');
 });

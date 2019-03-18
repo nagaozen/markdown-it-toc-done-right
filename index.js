@@ -25,6 +25,9 @@ module.exports = function toc_plugin(md, options) {
 		placeholder: "${toc}",
 		slugify: slugify,
 		containerClass: "table-of-contents",
+		listClass: undefined,
+		listElementClass: undefined,
+		linkClass: undefined,
 		level: 1,
 		listType: "ol",
 		format: undefined
@@ -89,10 +92,10 @@ module.exports = function toc_plugin(md, options) {
 		const keys = Object.keys(tree.c);
 		if ( keys.length === 0 ) return "";
 
-		let buffer = (`<${htmlencode(options.listType)}>`);
+		let buffer = (`<${htmlencode(options.listType)}${options.listClass ? ` class="${options.listClass}"` : ""}>`);
 		keys.forEach(function(key){
 			const node = tree.c[key];
-			buffer += (`<li><a href="#${unique(options.slugify(key))}">${typeof options.format === "function" ? options.format(key,htmlencode) : htmlencode(key)}</a>${ast_html(node, uniques)}</li>`);
+			buffer += (`<li${options.listElementClass ? ` class="${options.listElementClass}"` : ""}><a href="#${unique(options.slugify(key))}"${options.linkClass ? ` class="${options.linkClass}"` : ""}>${typeof options.format === "function" ? options.format(key,htmlencode) : htmlencode(key)}</a>${ast_html(node, uniques)}</li>`);
 		});
 		buffer += (`</${htmlencode(options.listType)}>`);
 
