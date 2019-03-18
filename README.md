@@ -10,7 +10,7 @@ A table of contents (TOC) plugin for [Markdown-it](https://github.com/markdown-i
 
 ## tl;dr
 
-If you are drowning in table of contents plugins options, just pick this one. It delivers an **accessible**, **semantic**, **SEO friendly** and **safe** TOC. Place a `${toc}` in your markdown and, BOOM, the `<nav class="table-of-contents">` will be there. [Click here for additional information](#really-another-markdown-it-table-of-contents-plugin).
+If you are drowning in table of contents plugins options, just pick this one. It delivers an **accessible**, **semantic**, **SEO friendly** and **safe** TOC. Place one of: `${toc}`, `[[toc]]`, `[toc]`, `[[_toc_]]` in your markdown and, BOOM, the `<nav class="table-of-contents">` will be there. [Click here for additional information](#really-another-markdown-it-table-of-contents-plugin).
 
 ## Installation
 
@@ -53,17 +53,17 @@ md.use(require("markdown-it-toc-done-right"), options);
 
 These options are available:
 
-Name              | Description                                                     | Default
-------------------|-----------------------------------------------------------------|-------------------------------------
-"placeholder"     | The string serving as the TOC placeholder in your markdown      | "${toc}"
-"slugify"         | A custom slugification function                                 | See [`index.js`](index.js)
-"containerClass"  | The class for the container DIV                                 | "table-of-contents"
-"listClass"       | The class for the `listType` HTMLElement                        | `undefined`
-"itemClass"       | The class for the LI                                            | `undefined`
-"linkClass"       | The class for the A                                             | `undefined`
-"level"           | Minimum level to apply anchors on or array of selected levels   | 1
-"listType"        | Type of list (`ul` for unordered, `ol` for ordered)             | `ol`
-"format"          | A function for formatting headings (see below)                  | `undefined`
+Name              | Description                                                      | Default
+------------------|------------------------------------------------------------------|-------------------------------------
+"placeholder"     | The pattern serving as the TOC placeholder in your markdown      | "(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\])"
+"slugify"         | A custom slugification function                                  | See [`index.js`](index.js)
+"containerClass"  | The class for the container DIV                                  | "table-of-contents"
+"listClass"       | The class for the `listType` HTMLElement                         | `undefined`
+"itemClass"       | The class for the LI                                             | `undefined`
+"linkClass"       | The class for the A                                              | `undefined`
+"level"           | Minimum level to apply anchors on or array of selected levels    | 1
+"listType"        | Type of list (`ul` for unordered, `ol` for ordered)              | `ol`
+"format"          | A function for formatting headings (see below)                   | `undefined`
 
 `format` is an optional function for changing how the headings are displayed in the TOC _e.g._ Wrapping content in `<span>`:
 
