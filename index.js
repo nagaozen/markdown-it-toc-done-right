@@ -33,7 +33,7 @@ module.exports = function toc_plugin(md, options) {
 		format: undefined
 	}, options);
 
-	let final_state;
+	let final_ast;
 
 	function toc(state, startLine/*, endLine, silent*/) {
 		let token;
@@ -76,7 +76,7 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	md.renderer.rules.toc_body = function(/*tokens, idx, options, env, renderer*/) {
-		return ast_html( headings_ast( final_state.tokens ) );
+		return ast_html(final_ast);
 	}
 
 	function ast_html(tree, uniques) {
@@ -135,7 +135,8 @@ module.exports = function toc_plugin(md, options) {
 	}
 
 	md.core.ruler.push("final_state", function(state){
-		final_state = state;
+		const tokens = state.tokens
+		final_ast = headings_ast(tokens)
 	});
 
 	md.block.ruler.before("heading", "toc", toc, {
