@@ -116,6 +116,14 @@ module.exports = function toc_plugin(md, options) {
 	function headings_ast(tokens) {
 		const ast   = { l: 0, n: "", c: {} };
 		const stack = [ast];
+
+		const isLevelSelectedNumber = selection => level => level >= selection
+		const isLevelSelectedArray = selection => level => selection.includes(level)
+		
+		const isLevelSelected = Array.isArray(options.level)
+      		? isLevelSelectedArray(options.level)
+			  : isLevelSelectedNumber(options.level)
+			  
 		for (let i = 0, iK = tokens.length; i < iK; i++) {
 			const token = tokens[i];
 			if(token.type === "heading_open") {
@@ -127,7 +135,7 @@ module.exports = function toc_plugin(md, options) {
 					c: {}
 				};
 
-				if (node.l >= options.level) {
+				if (isLevelSelected(node.l)) {
 					if ( node.l > stack[0].l ) {
 						stack[0].c[node.n] = node;
 						stack.unshift(node);
