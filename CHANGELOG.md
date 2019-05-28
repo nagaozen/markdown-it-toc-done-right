@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.0] - 2019-05-19
+### Changed
+-  browser global changed from `markdownitTocDoneRight` to `markdownItTocDoneRight`
+-  filename changed from `markdown-it-toc-made-right.min.js` to `markdownItTocDoneRight.umd.js`
+### Removed
+- `babel`
+- `babelify`
+- `browserify`
+- `eslint`
+- `uglify`
+### Added
+- `microbundle`
+- `standard`
+
 ## [3.0.0] - 2019-03-18
 ### Added
 - `listClass`, `itemClass` and `linkClass` options.
@@ -57,7 +71,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - runkit
 - unicode support example
 
-[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.3...v2.1.0
 [2.0.3]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.0.2...v2.0.3

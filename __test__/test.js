@@ -3,7 +3,7 @@ const md = require("markdown-it")({
 	xhtmlOut: true,
 	typographer: true
 }).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§' } )
-  .use( require("../index.js") );
+  .use( require('../dist/markdownItTocDoneRight.js') );
 
 
 
@@ -21,7 +21,7 @@ const umd = require("markdown-it")({
 	xhtmlOut: true,
 	typographer: true
 }).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify } )
-  .use( require("../index.js"), {
+  .use( require('../dist/markdownItTocDoneRight.js'), {
 	placeholder: "\\@\\[\\[TOC\\]\\]",
 	slugify: uslugify,
 	containerClass: "user-content-toc",
@@ -41,17 +41,18 @@ const level_md = require("markdown-it")({
 	xhtmlOut: true,
 	typographer: true
 }).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', level: 2 } )
-  .use( require("../index.js"), { level: 2 } );
+  .use( require('../dist/markdownItTocDoneRight.js'), { level: 2 } );
 
 
 
 
-  const level_md_array = require("markdown-it")({
+
+const level_md_array = require("markdown-it")({
 	html: false,
 	xhtmlOut: true,
 	typographer: true
 }).use( require("markdown-it-anchor"), { permalink: true, permalinkBefore: true, permalinkSymbol: '§', level: [1, 2] } )
-  .use( require("../index.js"), { level: [1, 2] } );
+  .use( require('../dist/markdownItTocDoneRight.js'), { level: [1, 2] } );
 
 
 

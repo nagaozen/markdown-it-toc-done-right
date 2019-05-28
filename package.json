@@ -1,10 +1,15 @@
 {
   "name": "markdown-it-toc-done-right",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Table of contents (TOC) for markdown-it markdown parser with focus on semantic and security.",
-  "main": "index.js",
+  "source": "index.js",
+  "main": "dist/markdownItTocDoneRight.js",
+  "module": "dist/markdownItTocDoneRight.mjs",
+  "unpkg": "dist/markdownItTocDoneRight.umd.js",
   "scripts": {
-    "lint": "eslint .",
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "lint": "standard --verbose index.js | snazzy",
     "test": "jest --coverage"
   },
   "repository": {
@@ -18,56 +23,35 @@
     "toc",
     "table of contents"
   ],
-  "author": "Nagao, Fabio Zendhi <https://github.com/nagaozen>",
+  "author": "Fabio Zendhi Nagao <https://github.com/nagaozen>",
   "license": "MIT",
+  "files": [
+    "README.md",
+    "LICENSE",
+    "dist/*",
+    "runkit.js"
+  ],
   "bugs": {
     "url": "https://github.com/nagaozen/markdown-it-toc-done-right/issues"
   },
   "homepage": "https://github.com/nagaozen/markdown-it-toc-done-right#readme",
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "browser": true,
-      "node": true,
-      "jest": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module"
-    },
-    "extends": "eslint-config-i-am-meticulous",
-    "rules": {
-      "import/order": 0,
-      "no-mixed-spaces-and-tabs": 0,
-      "import/newline-after-import": 0,
-      "import/no-unresolved": 0
-    }
-  },
   "jest": {
     "verbose": true
   },
   "runkitExampleFilename": "runkit.js",
   "dependencies": {},
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.2",
-    "coveralls": "^3.0.1",
-    "eslint": "^4.19.1",
-    "eslint-config-i-am-meticulous": "^10.0.0",
-    "jest": "^23.1.0",
-    "markdown-it": "^8.4.1",
-    "markdown-it-anchor": "^5.0.2",
-    "uglify-js": "^3.4.0",
+    "coveralls": "^3.0.3",
+    "jest": "^23.6.0",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.2.1",
+    "microbundle": "^0.11.0",
+    "snazzy": "^8.0.0",
+    "standard": "^12.0.1",
     "uslug": "^1.0.4"
   },
   "peerDependencies": {
-    "markdown-it": "^8.4.1"
+    "markdown-it": "^8.4.1",
+    "markdown-it-anchor": "^5.0.2"
   }
 }

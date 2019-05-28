@@ -19,10 +19,10 @@ li:before { content: counters(list-item,'.') ' '; }
 
 	</head>
 	<body>
-		<script src="https://unpkg.com/markdown-it/dist/markdown-it.min.js"></script>
-		<script src="lib/markdown-it-anchor.js"></script>
-		<script src="lib/uslug.js"></script>
-		<script src="dist/markdown-it-toc-made-right.min.js"></script>
+		<script src="https://unpkg.com/markdown-it@8.4.2/dist/markdown-it.min.js"></script>
+		<script src="https://unpkg.com/markdown-it-anchor@5.2.0/dist/markdownItAnchor.umd.js"></script>
+		<script src="uslug.js"></script>
+		<script src="dist/markdownItTocDoneRight.umd.js"></script>
 		<!-- text/markdown isn't a standard, but has an informational rfc @ <https://tools.ietf.org/html/rfc7763> -->
 		<script id="md" type="text/markdown">
 **Table of Contents**
@@ -194,14 +194,16 @@ Aegides cetera tecta, luce, quas verba Proserpina os.
 > Orchomenosque omni tractoque sui male, sibi tempora habebit, sanguine, me.
 		</script>
 		<script>
+
 var uslugify = function(s) {
 	return window.uslug(s);
 }
 
 var md = window.markdownit();
 md.use(window.markdownItAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§', slugify: uslugify/*, level: 2*/ })
-  .use(window.markdownitTocDoneRight, { slugify: uslugify/*, level: 2*/ }); 
+  .use(window.markdownItTocDoneRight, { slugify: uslugify/*, level: 2*/ }); 
 document.body.innerHTML = md.render( document.getElementById("md").innerHTML );
+
 		</script>
 	</body>
 </html>
