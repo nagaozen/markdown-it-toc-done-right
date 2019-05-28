@@ -46,7 +46,8 @@ const level_md = require("markdown-it")({
 
 
 
-  const level_md_array = require("markdown-it")({
+
+const level_md_array = require("markdown-it")({
 	html: false,
 	xhtmlOut: true,
 	typographer: true
