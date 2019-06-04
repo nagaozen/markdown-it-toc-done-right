@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-toc-done-right",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Table of contents (TOC) for markdown-it markdown parser with focus on semantic and security.",
   "source": "index.js",
   "main": "dist/markdownItTocDoneRight.js",
@@ -42,7 +42,7 @@
   "dependencies": {},
   "devDependencies": {
     "coveralls": "^3.0.3",
-    "jest": "^23.6.0",
+    "jest": "^24.8.0",
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.2.1",
     "microbundle": "^0.11.0",
