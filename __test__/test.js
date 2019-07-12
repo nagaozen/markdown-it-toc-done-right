@@ -163,5 +163,5 @@ test("level(Array Type) option should work as expected", () => {
 });
 
 test("all other options should work as expected", () => {
-	expect( umd.render("@[[TOC]]\n\n# 日本語") ).toBe('<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n');
+	expect( umd.render("@[[TOC]]\n\n# 日本語\n\n    # should be considered as code") ).toBe('<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語" aria-hidden="true">§</a> 日本語</h1>\n<pre><code># should be considered as code</code></pre>\n');
 });

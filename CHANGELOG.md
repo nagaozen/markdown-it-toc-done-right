@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.2] - 2019-07-11
+### Changed
+- fixed [#14](https://github.com/nagaozen/markdown-it-toc-done-right/issues/14)
+- updated dependencies, especially microbundle. Fix [#12](https://github.com/nagaozen/markdown-it-toc-done-right/issues/12)?
+- executed `npm audit fix --force` to fix dependencies vunerabilities
+
 ## [4.0.1] - 2019-06-03
 ### Changed
 - executed `npm audit fix --force` to fix dependencies vunerabilities
@@ -75,7 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - runkit
 - unicode support example
 
-[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.1...HEAD
+[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.2...HEAD
+[4.0.1]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.1.0...v3.0.0

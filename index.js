@@ -57,11 +57,11 @@ function tocPlugin (md, options) {
 
     token = state.push('tocOpen', 'nav', 1)
     token.markup = ''
-    token.map = [ startLine, state.line ]
+    token.map = [startLine, state.line]
 
     token = state.push('tocBody', '', 0)
     token.markup = ''
-    token.map = [ startLine, state.line ]
+    token.map = [startLine, state.line]
     token.children = []
 
     token = state.push('tocClose', 'nav', -1)
@@ -82,16 +82,7 @@ function tocPlugin (md, options) {
     return ast2html(ast)
   }
 
-  function ast2html (tree, uniques) {
-    uniques = uniques || {}
-    function unique (s) {
-      let u = s
-      let i = 2
-      while (uniques.hasOwnProperty(u)) u = `${s}-${i++}`
-      uniques[u] = true
-      return u
-    }
-
+  function ast2html (tree) {
     const listClass = options.listClass ? ` class="${htmlencode(options.listClass)}"` : ''
     const itemClass = options.itemClass ? ` class="${htmlencode(options.itemClass)}"` : ''
     const linkClass = options.linkClass ? ` class="${htmlencode(options.linkClass)}"` : ''
@@ -102,7 +93,7 @@ function tocPlugin (md, options) {
     let buffer = (`<${htmlencode(options.listType) + listClass}>`)
     keys.forEach(function (key) {
       const node = tree.c[key]
-      buffer += (`<li${itemClass}><a${linkClass} href="#${unique(options.slugify(key))}">${typeof options.format === 'function' ? options.format(key, htmlencode) : htmlencode(key)}</a>${ast2html(node, uniques)}</li>`)
+      buffer += (`<li${itemClass}><a${linkClass} href="#${node.id}">${typeof options.format === 'function' ? options.format(node.n, htmlencode) : htmlencode(node.n)}</a>${ast2html(node)}</li>`)
     })
     buffer += (`</${htmlencode(options.listType)}>`)
 
@@ -110,6 +101,15 @@ function tocPlugin (md, options) {
   }
 
   function headings2ast (tokens) {
+    const uniques = {}
+    function unique (s) {
+      let u = s
+      let i = 2
+      while (Object.prototype.hasOwnProperty.call(uniques, u)) u = `${s}-${i++}`
+      uniques[u] = true
+      return u
+    }
+
     const ast = { l: 0, n: '', c: {} }
     const stack = [ast]
 
@@ -123,27 +123,30 @@ function tocPlugin (md, options) {
     for (let i = 0, iK = tokens.length; i < iK; i++) {
       const token = tokens[i]
       if (token.type === 'heading_open') {
+        const key = (
+          tokens[i + 1]
+            .children
+            .filter(function (token) { return token.type === 'text' || token.type === 'code_inline' })
+            .reduce(function (acc, t) { return acc + t.content }, '')
+        )
+
         const node = {
           l: parseInt(token.tag.substr(1), 10),
-          n: (
-            tokens[i + 1]
-              .children
-              .filter(function (token) { return token.type === 'text' || token.type === 'code_inline' })
-              .reduce(function (acc, t) { return acc + t.content }, '')
-          ),
+          n: key,
           c: {}
         }
 
         if (isLevelSelected(node.l)) {
+          node.id = unique(options.slugify(key))
           if (node.l > stack[0].l) {
-            stack[0].c[node.n] = node
+            stack[0].c[node.id] = node
             stack.unshift(node)
           } else if (node.l === stack[0].l) {
-            stack[1].c[node.n] = node
+            stack[1].c[node.id] = node
             stack[0] = node
           } else {
             while (node.l <= stack[0].l) stack.shift()
-            stack[0].c[node.n] = node
+            stack[0].c[node.id] = node
             stack.unshift(node)
           }
         }
@@ -158,7 +161,7 @@ function tocPlugin (md, options) {
   })
 
   md.block.ruler.before('heading', 'toc', toc, {
-    alt: [ 'paragraph', 'reference', 'blockquote' ]
+    alt: ['paragraph', 'reference', 'blockquote']
   })
 }
 
