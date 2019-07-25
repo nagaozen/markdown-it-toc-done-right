@@ -32,7 +32,8 @@ function tocPlugin (md, options) {
     linkClass: undefined,
     level: 1,
     listType: 'ol',
-    format: undefined
+    format: undefined,
+    tocCallback: undefined
   }, options)
 
   let ast
@@ -152,12 +153,17 @@ function tocPlugin (md, options) {
         }
       }
     }
+
     return ast
   }
 
   md.core.ruler.push('generateTocAst', function (state) {
     const tokens = state.tokens
     ast = headings2ast(tokens)
+
+    if (typeof options.tocCallback === 'function') {
+      options.tocCallback(md.renderer.rules.tocOpen() + md.renderer.rules.tocBody() + md.renderer.rules.tocClose())
+    }
   })
 
   md.block.ruler.before('heading', 'toc', toc, {
