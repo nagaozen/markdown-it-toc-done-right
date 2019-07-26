@@ -138,7 +138,8 @@ function tocPlugin (md, options) {
         }
 
         if (isLevelSelected(node.l)) {
-          node.id = unique(options.slugify(key))
+          const slug = token.attrGet('id') || unique(options.slugify(key))
+          node.id = slug
           if (node.l > stack[0].l) {
             stack[0].c[node.id] = node
             stack.unshift(node)
