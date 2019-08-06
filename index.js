@@ -32,7 +32,8 @@ function tocPlugin (md, options) {
     linkClass: undefined,
     level: 1,
     listType: 'ol',
-    format: undefined
+    format: undefined,
+    max_depth: 3
   }, options)
 
   let ast
@@ -79,10 +80,12 @@ function tocPlugin (md, options) {
   }
 
   md.renderer.rules.tocBody = function (/* tokens, idx, options, env, renderer */) {
-    return ast2html(ast)
+    return ast2html(ast, 1)
   }
 
-  function ast2html (tree) {
+  function ast2html (tree, level) {
+    if (level > options.max_depth) return '';
+    
     const listClass = options.listClass ? ` class="${htmlencode(options.listClass)}"` : ''
     const itemClass = options.itemClass ? ` class="${htmlencode(options.itemClass)}"` : ''
     const linkClass = options.linkClass ? ` class="${htmlencode(options.linkClass)}"` : ''
@@ -93,7 +96,7 @@ function tocPlugin (md, options) {
     let buffer = (`<${htmlencode(options.listType) + listClass}>`)
     keys.forEach(function (key) {
       const node = tree.c[key]
-      buffer += (`<li${itemClass}><a${linkClass} href="#${node.id}">${typeof options.format === 'function' ? options.format(node.n, htmlencode) : htmlencode(node.n)}</a>${ast2html(node)}</li>`)
+      buffer += (`<li${itemClass}><a${linkClass} href="#${node.id}">${typeof options.format === 'function' ? options.format(node.n, htmlencode) : htmlencode(node.n)}</a>${ast2html(node, level + 1)}</li>`)
     })
     buffer += (`</${htmlencode(options.listType)}>`)
 
