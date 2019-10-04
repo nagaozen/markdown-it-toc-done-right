@@ -58,8 +58,22 @@ const level_md_array = require("markdown-it")({
 
 
 
+const containerId_md = require("markdown-it")({
+	html: false,
+	xhtmlOut: true,
+	typographer: true
+}).use( require('../dist/markdownItTocDoneRight.js'), { containerId: "toc" } );
+
+
+
+
+
 test("empty set", () => {
 	expect( md.render("${toc}") ).toBe('<nav class="table-of-contents"></nav>');
+});
+
+test("containerId is set correctly", () => {
+	expect( containerId_md.render("${toc}") ).toBe('<nav id="toc" class="table-of-contents"></nav>');
 });
 
 test("single element", () => {
