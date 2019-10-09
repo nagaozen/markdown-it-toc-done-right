@@ -58,6 +58,7 @@ Name              | Description                                                 
 "placeholder"     | The pattern serving as the TOC placeholder in your markdown      | "(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\])"
 "slugify"         | A custom slugification function                                  | See [`index.js`](index.js)
 "containerClass"  | The class for the container DIV                                  | "table-of-contents"
+"containerId"     | The ID for the container DIV                                     | `undefined`
 "listClass"       | The class for the `listType` HTMLElement                         | `undefined`
 "itemClass"       | The class for the LI                                             | `undefined`
 "linkClass"       | The class for the A                                              | `undefined`

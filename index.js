@@ -27,6 +27,7 @@ function tocPlugin (md, options) {
     placeholder: '(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\])',
     slugify: slugify,
     containerClass: 'table-of-contents',
+    containerId: undefined,
     listClass: undefined,
     itemClass: undefined,
     linkClass: undefined,
@@ -42,9 +43,6 @@ function tocPlugin (md, options) {
     let token
     const pos = state.bMarks[startLine] + state.tShift[startLine]
     const max = state.eMarks[startLine]
-
-    // if it's indented more than 3 spaces, it should be a code block
-    if (state.sCount[startLine] - state.blkIndent >= 4) return false
 
     // use whitespace as a line tokenizer and extract the first token
     // to test against the placeholder anchored pattern, rejecting if false
@@ -71,7 +69,8 @@ function tocPlugin (md, options) {
   }
 
   md.renderer.rules.tocOpen = function (/* tokens, idx, options, env, renderer */) {
-    return `<nav class="${htmlencode(options.containerClass)}">`
+    const id = options.containerId ? ` id="${htmlencode(options.containerId)}"` : ''
+    return `<nav${id} class="${htmlencode(options.containerClass)}">`
   }
 
   md.renderer.rules.tocClose = function (/* tokens, idx, options, env, renderer */) {
