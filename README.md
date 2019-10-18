@@ -65,6 +65,7 @@ Name              | Description                                                 
 "level"           | Minimum level to apply anchors on or array of selected levels    | 1
 "listType"        | Type of list (`ul` for unordered, `ol` for ordered)              | `ol`
 "format"          | A function for formatting headings (see below)                   | `undefined`
+"callback"        | A function (html, ast) {} called after rendering.                | `undefined`
 
 `format` is an optional function for changing how the headings are displayed in the TOC _e.g._ Wrapping content in `<span>`:
 

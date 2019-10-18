@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.0] - 2019-10-17
+### Added
+- accept options in the placeholder [#16](https://github.com/nagaozen/markdown-it-toc-done-right/issues/16)
+- `callback` option [#18](https://github.com/nagaozen/markdown-it-toc-done-right/issues/18)
+### Changed
+- fixed [#20](https://github.com/nagaozen/markdown-it-toc-done-right/issues/20)
+- fixed [#22](https://github.com/nagaozen/markdown-it-toc-done-right/issues/22)
+- `test.js` to match the changes from `markdown-it-anchor`
+- `headings2ast` removed options dependency (will generate a tree with all headings)
+- `ast2html` modified to hold and apply almost all options, making `inlineOptions` possible
+
 ## [4.0.2] - 2019-07-11
 ### Changed
 - fixed [#14](https://github.com/nagaozen/markdown-it-toc-done-right/issues/14)
@@ -81,8 +92,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - runkit
 - unicode support example
 
-[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.2...HEAD
-[4.0.1]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.1...v4.0.2
+[Unreleased]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.2...v4.1.0
+[4.0.2]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/nagaozen/markdown-it-toc-done-right/compare/v2.1.0...v3.0.0

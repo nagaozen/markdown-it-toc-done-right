@@ -24,7 +24,7 @@ function htmlencode (x) {
 
 function tocPlugin (md, options) {
   options = Object.assign({}, {
-    placeholder: '(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\])',
+    placeholder: '(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\]|\\$\\<toc(\\{[^}]*\\})\\>)',
     slugify: slugify,
     containerClass: 'table-of-contents',
     containerId: undefined,
@@ -33,7 +33,8 @@ function tocPlugin (md, options) {
     linkClass: undefined,
     level: 1,
     listType: 'ol',
-    format: undefined
+    format: undefined,
+    callback: undefined/* function(html, ast) {} */
   }, options)
 
   let ast
@@ -51,15 +52,27 @@ function tocPlugin (md, options) {
 
     if (silent) return true
 
+    const matches = pattern.exec(lineFirstToken)
+    let inlineOptions = {}
+    if (matches !== null && matches.length === 3) {
+      try {
+        inlineOptions = JSON.parse(matches[2])
+      } catch (ex) {
+        // silently ignore inline options
+      }
+    }
+
     state.line = startLine + 1
 
     token = state.push('tocOpen', 'nav', 1)
     token.markup = ''
     token.map = [startLine, state.line]
+    token.inlineOptions = inlineOptions
 
     token = state.push('tocBody', '', 0)
     token.markup = ''
     token.map = [startLine, state.line]
+    token.inlineOptions = inlineOptions
     token.children = []
 
     token = state.push('tocClose', 'nav', -1)
@@ -68,38 +81,27 @@ function tocPlugin (md, options) {
     return true
   }
 
-  md.renderer.rules.tocOpen = function (/* tokens, idx, options, env, renderer */) {
-    const id = options.containerId ? ` id="${htmlencode(options.containerId)}"` : ''
-    return `<nav${id} class="${htmlencode(options.containerClass)}">`
+  md.renderer.rules.tocOpen = function (tokens, idx/* , options, env, renderer */) {
+    let _options = Object.assign({}, options)
+    if (tokens && idx >= 0) {
+      const token = tokens[idx]
+      _options = Object.assign(_options, token.inlineOptions)
+    }
+    const id = _options.containerId ? ` id="${htmlencode(_options.containerId)}"` : ''
+    return `<nav${id} class="${htmlencode(_options.containerClass)}">`
   }
 
   md.renderer.rules.tocClose = function (/* tokens, idx, options, env, renderer */) {
     return '</nav>'
   }
 
-  md.renderer.rules.tocBody = function (/* tokens, idx, options, env, renderer */) {
-    return ast2html(ast)
-  }
+  md.renderer.rules.tocBody = function (tokens, idx/* , options, env, renderer */) {
+    let _options = Object.assign({}, options)
+    if (tokens && idx >= 0) {
+      const token = tokens[idx]
+      _options = Object.assign(_options, token.inlineOptions)
+    }
 
-  function ast2html (tree) {
-    const listClass = options.listClass ? ` class="${htmlencode(options.listClass)}"` : ''
-    const itemClass = options.itemClass ? ` class="${htmlencode(options.itemClass)}"` : ''
-    const linkClass = options.linkClass ? ` class="${htmlencode(options.linkClass)}"` : ''
-
-    const keys = Object.keys(tree.c)
-    if (keys.length === 0) return ''
-
-    let buffer = (`<${htmlencode(options.listType) + listClass}>`)
-    keys.forEach(function (key) {
-      const node = tree.c[key]
-      buffer += (`<li${itemClass}><a${linkClass} href="#${node.id}">${typeof options.format === 'function' ? options.format(node.n, htmlencode) : htmlencode(node.n)}</a>${ast2html(node)}</li>`)
-    })
-    buffer += (`</${htmlencode(options.listType)}>`)
-
-    return buffer
-  }
-
-  function headings2ast (tokens) {
     const uniques = {}
     function unique (s) {
       let u = s
@@ -109,15 +111,44 @@ function tocPlugin (md, options) {
       return u
     }
 
-    const ast = { l: 0, n: '', c: {} }
-    const stack = [ast]
-
     const isLevelSelectedNumber = selection => level => level >= selection
     const isLevelSelectedArray = selection => level => selection.includes(level)
 
-    const isLevelSelected = Array.isArray(options.level)
-      ? isLevelSelectedArray(options.level)
-      : isLevelSelectedNumber(options.level)
+    const isLevelSelected = Array.isArray(_options.level)
+      ? isLevelSelectedArray(_options.level)
+      : isLevelSelectedNumber(_options.level)
+
+    function ast2html (tree) {
+      const listClass = _options.listClass ? ` class="${htmlencode(_options.listClass)}"` : ''
+      const itemClass = _options.itemClass ? ` class="${htmlencode(_options.itemClass)}"` : ''
+      const linkClass = _options.linkClass ? ` class="${htmlencode(_options.linkClass)}"` : ''
+
+      if (tree.c.length === 0) return ''
+
+      let buffer = ''
+      if (tree.l === 0 || isLevelSelected(tree.l)) {
+        buffer += (`<${htmlencode(_options.listType) + listClass}>`)
+      }
+      tree.c.forEach(node => {
+        if (isLevelSelected(node.l)) {
+          buffer += (`<li${itemClass}><a${linkClass} href="#${unique(options.slugify(node.n))}">${typeof _options.format === 'function' ? _options.format(node.n, htmlencode) : htmlencode(node.n)}</a>${ast2html(node)}</li>`)
+        } else {
+          // unique(options.slugify(node.n))
+          buffer += ast2html(node)
+        }
+      })
+      if (tree.l === 0 || isLevelSelected(tree.l)) {
+        buffer += (`</${htmlencode(_options.listType)}>`)
+      }
+      return buffer
+    }
+
+    return ast2html(ast)
+  }
+
+  function headings2ast (tokens) {
+    const ast = { l: 0, n: '', c: [] }
+    const stack = [ast]
 
     for (let i = 0, iK = tokens.length; i < iK; i++) {
       const token = tokens[i]
@@ -126,37 +157,42 @@ function tocPlugin (md, options) {
           tokens[i + 1]
             .children
             .filter(function (token) { return token.type === 'text' || token.type === 'code_inline' })
-            .reduce(function (acc, t) { return acc + t.content }, '')
+            .reduce(function (s, t) { return s + t.content }, '')
         )
 
         const node = {
           l: parseInt(token.tag.substr(1), 10),
           n: key,
-          c: {}
+          c: []
         }
 
-        if (isLevelSelected(node.l)) {
-          node.id = unique(options.slugify(key))
-          if (node.l > stack[0].l) {
-            stack[0].c[node.id] = node
-            stack.unshift(node)
-          } else if (node.l === stack[0].l) {
-            stack[1].c[node.id] = node
-            stack[0] = node
-          } else {
-            while (node.l <= stack[0].l) stack.shift()
-            stack[0].c[node.id] = node
-            stack.unshift(node)
-          }
+        if (node.l > stack[0].l) {
+          stack[0].c.push(node)
+          stack.unshift(node)
+        } else if (node.l === stack[0].l) {
+          stack[1].c.push(node)
+          stack[0] = node
+        } else {
+          while (node.l <= stack[0].l) stack.shift()
+          stack[0].c.push(node)
+          stack.unshift(node)
         }
       }
     }
+
     return ast
   }
 
   md.core.ruler.push('generateTocAst', function (state) {
     const tokens = state.tokens
     ast = headings2ast(tokens)
+
+    if (typeof options.callback === 'function') {
+      options.callback(
+        md.renderer.rules.tocOpen() + md.renderer.rules.tocBody() + md.renderer.rules.tocClose(),
+        ast
+      )
+    }
   })
 
   md.block.ruler.before('heading', 'toc', toc, {
