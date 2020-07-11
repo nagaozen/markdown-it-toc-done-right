@@ -49,8 +49,5 @@
     "snazzy": "^8.0.0",
     "standard": "^13.1.0",
     "uslug": "^1.0.4"
-  },
-  "peerDependencies": {
-    "markdown-it-anchor": "^5.2.5"
   }
 }
