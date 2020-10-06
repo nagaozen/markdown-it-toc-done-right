@@ -33,6 +33,7 @@ function tocPlugin (md, options) {
     linkClass: undefined,
     level: 1,
     listType: 'ol',
+    slugStartIndex: 1,
     format: undefined,
     callback: undefined/* function(html, ast) {} */
   }, options)
@@ -105,7 +106,7 @@ function tocPlugin (md, options) {
     const uniques = {}
     function unique (s) {
       let u = s
-      let i = 2
+      let i = _options.slugStartIndex
       while (Object.prototype.hasOwnProperty.call(uniques, u)) u = `${s}-${i++}`
       uniques[u] = true
       return u
