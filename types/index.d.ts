@@ -21,7 +21,7 @@ declare module 'markdown-it-toc-done-right' {
         c: TocAst[]
     }
 
-    const markdownItTocDoneRight: MarkdownIt.PluginWithOptions<TocOptions>
+    const markdownItTocDoneRight: MarkdownIt.PluginWithOptions<Partial<TocOptions>>
 
     export default markdownItTocDoneRight
 }
