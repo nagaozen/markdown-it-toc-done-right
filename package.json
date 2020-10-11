@@ -29,8 +29,10 @@
     "README.md",
     "LICENSE",
     "dist/*",
-    "runkit.js"
+    "runkit.js",
+    "types/*"
   ],
+  "types": "types/index.d.ts",
   "bugs": {
     "url": "https://github.com/nagaozen/markdown-it-toc-done-right/issues"
   },
@@ -44,6 +46,7 @@
     "coveralls": "^3.0.7",
     "jest": "^24.9.0",
     "markdown-it": "^10.0.0",
+    "@types/markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.2.5",
     "microbundle": "^0.11.0",
     "snazzy": "^8.0.0",
