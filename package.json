@@ -9,7 +9,7 @@
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
-    "lint": "standard --verbose index.js | snazzy",
+    "lint": "standard --verbose index.js __test__/test.js | snazzy",
     "test": "jest --coverage"
   },
   "repository": {
