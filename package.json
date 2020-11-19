@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-toc-done-right",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Table of contents (TOC) for markdown-it markdown parser with focus on semantic and security.",
   "source": "index.js",
   "main": "dist/markdownItTocDoneRight.js",
@@ -43,12 +43,12 @@
   "runkitExampleFilename": "runkit.js",
   "dependencies": {},
   "devDependencies": {
-    "coveralls": "^3.0.7",
-    "jest": "^24.9.0",
-    "markdown-it": "^10.0.0",
     "@types/markdown-it": "^10.0.0",
+    "coveralls": "^3.0.7",
+    "jest": "^26.6.3",
+    "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^6.0.0",
-    "microbundle": "^0.11.0",
+    "microbundle": "^0.12.4",
     "snazzy": "^8.0.0",
     "standard": "^13.1.0",
     "uslug": "^1.0.4"

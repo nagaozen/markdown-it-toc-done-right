@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.0] - 2020-11-19
+### Added
+- implemented `uniqueSlugStartIndex`
+
 ## [4.1.0] - 2019-10-17
 ### Added
 - accept options in the placeholder [#16](https://github.com/nagaozen/markdown-it-toc-done-right/issues/16)

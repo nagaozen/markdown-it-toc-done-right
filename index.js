@@ -26,6 +26,7 @@ function tocPlugin (md, options) {
   options = Object.assign({}, {
     placeholder: '(\\$\\{toc\\}|\\[\\[?_?toc_?\\]?\\]|\\$\\<toc(\\{[^}]*\\})\\>)',
     slugify: slugify,
+    uniqueSlugStartIndex: 1,
     containerClass: 'table-of-contents',
     containerId: undefined,
     listClass: undefined,
@@ -33,7 +34,6 @@ function tocPlugin (md, options) {
     linkClass: undefined,
     level: 1,
     listType: 'ol',
-    slugStartIndex: 1,
     format: undefined,
     callback: undefined/* function(html, ast) {} */
   }, options)
@@ -106,7 +106,7 @@ function tocPlugin (md, options) {
     const uniques = {}
     function unique (s) {
       let u = s
-      let i = _options.slugStartIndex
+      let i = _options.uniqueSlugStartIndex
       while (Object.prototype.hasOwnProperty.call(uniques, u)) u = `${s}-${i++}`
       uniques[u] = true
       return u
@@ -134,7 +134,6 @@ function tocPlugin (md, options) {
         if (isLevelSelected(node.l)) {
           buffer += (`<li${itemClass}><a${linkClass} href="#${unique(options.slugify(node.n))}">${typeof _options.format === 'function' ? _options.format(node.n, htmlencode) : htmlencode(node.n)}</a>${ast2html(node)}</li>`)
         } else {
-          // unique(options.slugify(node.n))
           buffer += ast2html(node)
         }
       })

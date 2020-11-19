@@ -186,7 +186,7 @@ test('level(Array Type) option should work as expected', () => {
   expect(md.render(mdContent)).toBe(htmlContent)
 })
 
-test('slugStartIndex set to 0', () => {
+test('uniqueSlugStartIndex set to 0', () => {
   const md = getMarkdownIt()
     .use(markdownItAnchor, {
       permalink: true,
@@ -195,7 +195,7 @@ test('slugStartIndex set to 0', () => {
       level: [1, 2],
       uniqueSlugStartIndex: 0
     })
-    .use(markdownItTocDoneRight, { slugStartIndex: 0 })
+    .use(markdownItTocDoneRight, { uniqueSlugStartIndex: 0 })
   const mdContent = '[toc]\n\n# header\n\n## header'
   const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-0"> header</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header">§</a> header</h1>
 <h2 id="header-0"><a class="header-anchor" href="#header-0">§</a> header</h2>
@@ -209,13 +209,11 @@ test('all other options should work as expected', () => {
       permalink: true,
       permalinkBefore: true,
       permalinkSymbol: '§',
-      uniqueSlugStartIndex: 2,
       slugify: uslugify
     })
     .use(markdownItTocDoneRight, {
       placeholder: '\\@\\[\\[TOC\\]\\]',
       slugify: uslugify,
-      slugStartIndex: 2,
       containerClass: 'user-content-toc',
       listClass: 'my-list',
       itemClass: 'my-item',
@@ -227,6 +225,6 @@ test('all other options should work as expected', () => {
       }
     })
   const mdContent = '@[[TOC]]\n\n# 日本語\n\n# 日本語\n\n    # should be considered as code'
-  const htmlContent = '<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li><li class="my-item"><a class="my-link" href="#日本語-2"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語">§</a> 日本語</h1>\n<h1 id="日本語-2"><a class="header-anchor" href="#日本語-2">§</a> 日本語</h1>\n<pre><code># should be considered as code</code></pre>\n'
+  const htmlContent = '<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li><li class="my-item"><a class="my-link" href="#日本語-1"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語">§</a> 日本語</h1>\n<h1 id="日本語-1"><a class="header-anchor" href="#日本語-1">§</a> 日本語</h1>\n<pre><code># should be considered as code</code></pre>\n'
   expect(md.render(mdContent)).toBe(htmlContent)
 })

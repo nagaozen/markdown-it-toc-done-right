@@ -4,7 +4,7 @@ declare module 'markdown-it-toc-done-right' {
     export interface TocOptions {
         placeholder: string
         slugify: (s: string) => string
-        slugStartIndex: number
+        uniqueSlugStartIndex: number
         containerClass: string
         containerId: string
         listClass: string
