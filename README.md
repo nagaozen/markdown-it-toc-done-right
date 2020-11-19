@@ -62,6 +62,7 @@ Name              | Description                                                 
 "listClass"       | The class for the `listType` HTMLElement                         | `undefined`
 "itemClass"       | The class for the LI                                             | `undefined`
 "linkClass"       | The class for the A                                              | `undefined`
+"slugStartIndex"  | The start index that should be appended to non-unique headings   | 1
 "level"           | Minimum level to apply anchors on or array of selected levels    | 1
 "listType"        | Type of list (`ul` for unordered, `ol` for ordered)              | `ol`
 "format"          | A function for formatting headings (see below)                   | `undefined`

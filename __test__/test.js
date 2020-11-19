@@ -116,25 +116,25 @@ Quisque fringilla urna sit amet elit ultrices tincidunt. Interdum et malesuada f
 
 test('headers innerText may happen more than once', () => {
   const mdContent = '[toc]\n\n# Title\n\n## Section 1\n\n### Subsection 1\n\n### Subsection 2\n\n## Section 2\n\n### Subsection 1\n\n### Subsection 2\n\n## Section 3\n\n### Subsection 1\n\n### Subsection 2'
-  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#title"> Title</a><ol><li><a href="#section-1"> Section 1</a><ol><li><a href="#subsection-1"> Subsection 1</a></li><li><a href="#subsection-2"> Subsection 2</a></li></ol></li><li><a href="#section-2"> Section 2</a><ol><li><a href="#subsection-1-2"> Subsection 1</a></li><li><a href="#subsection-2-2"> Subsection 2</a></li></ol></li><li><a href="#section-3"> Section 3</a><ol><li><a href="#subsection-1-3"> Subsection 1</a></li><li><a href="#subsection-2-3"> Subsection 2</a></li></ol></li></ol></li></ol></nav><h1 id="title"><a class="header-anchor" href="#title">§</a> Title</h1>
+  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#title"> Title</a><ol><li><a href="#section-1"> Section 1</a><ol><li><a href="#subsection-1"> Subsection 1</a></li><li><a href="#subsection-2"> Subsection 2</a></li></ol></li><li><a href="#section-2"> Section 2</a><ol><li><a href="#subsection-1-1"> Subsection 1</a></li><li><a href="#subsection-2-1"> Subsection 2</a></li></ol></li><li><a href="#section-3"> Section 3</a><ol><li><a href="#subsection-1-2"> Subsection 1</a></li><li><a href="#subsection-2-2"> Subsection 2</a></li></ol></li></ol></li></ol></nav><h1 id="title"><a class="header-anchor" href="#title">§</a> Title</h1>
 <h2 id="section-1"><a class="header-anchor" href="#section-1">§</a> Section 1</h2>
 <h3 id="subsection-1"><a class="header-anchor" href="#subsection-1">§</a> Subsection 1</h3>
 <h3 id="subsection-2"><a class="header-anchor" href="#subsection-2">§</a> Subsection 2</h3>
 <h2 id="section-2"><a class="header-anchor" href="#section-2">§</a> Section 2</h2>
+<h3 id="subsection-1-1"><a class="header-anchor" href="#subsection-1-1">§</a> Subsection 1</h3>
+<h3 id="subsection-2-1"><a class="header-anchor" href="#subsection-2-1">§</a> Subsection 2</h3>
+<h2 id="section-3"><a class="header-anchor" href="#section-3">§</a> Section 3</h2>
 <h3 id="subsection-1-2"><a class="header-anchor" href="#subsection-1-2">§</a> Subsection 1</h3>
 <h3 id="subsection-2-2"><a class="header-anchor" href="#subsection-2-2">§</a> Subsection 2</h3>
-<h2 id="section-3"><a class="header-anchor" href="#section-3">§</a> Section 3</h2>
-<h3 id="subsection-1-3"><a class="header-anchor" href="#subsection-1-3">§</a> Subsection 1</h3>
-<h3 id="subsection-2-3"><a class="header-anchor" href="#subsection-2-3">§</a> Subsection 2</h3>
 `
   expect(commonMd.render(mdContent)).toBe(htmlContent)
 })
 
 test('and sometimes slugify with suffix may generate another existing header', () => {
-  const mdContent = '[[toc]]\n\n# header\n\n## header\n\n## header 2'
-  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-2"> header</a></li><li><a href="#header-2-2"> header 2</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header">§</a> header</h1>
-<h2 id="header-2"><a class="header-anchor" href="#header-2">§</a> header</h2>
-<h2 id="header-2-2"><a class="header-anchor" href="#header-2-2">§</a> header 2</h2>
+  const mdContent = '[[toc]]\n\n# header\n\n## header\n\n## header 1'
+  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-1"> header</a></li><li><a href="#header-1-1"> header 1</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header">§</a> header</h1>
+<h2 id="header-1"><a class="header-anchor" href="#header-1">§</a> header</h2>
+<h2 id="header-1-1"><a class="header-anchor" href="#header-1-1">§</a> header 1</h2>
 `
   expect(commonMd.render(mdContent)).toBe(htmlContent)
 })
@@ -175,13 +175,30 @@ test('level(Array Type) option should work as expected', () => {
       level: [1, 2]
     })
     .use(markdownItTocDoneRight, { level: [1, 2] })
-  const mdContent = '${toc}\n\n# header\n\n## header\n\n## header 2\n\n# header 4\n\n## header 5\n\n## header 2'
-  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-2"> header</a></li><li><a href="#header-2-2"> header 2</a></li></ol></li><li><a href="#header-4"> header 4</a><ol><li><a href="#header-5"> header 5</a></li><li><a href="#header-2-3"> header 2</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header">§</a> header</h1>
-<h2 id="header-2"><a class="header-anchor" href="#header-2">§</a> header</h2>
-<h2 id="header-2-2"><a class="header-anchor" href="#header-2-2">§</a> header 2</h2>
+  const mdContent = '${toc}\n\n# header\n\n## header\n\n## header 1\n\n# header 4\n\n## header 5\n\n## header 1'
+  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-1"> header</a></li><li><a href="#header-1-1"> header 1</a></li></ol></li><li><a href="#header-4"> header 4</a><ol><li><a href="#header-5"> header 5</a></li><li><a href="#header-1-2"> header 1</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header">§</a> header</h1>
+<h2 id="header-1"><a class="header-anchor" href="#header-1">§</a> header</h2>
+<h2 id="header-1-1"><a class="header-anchor" href="#header-1-1">§</a> header 1</h2>
 <h1 id="header-4"><a class="header-anchor" href="#header-4">§</a> header 4</h1>
 <h2 id="header-5"><a class="header-anchor" href="#header-5">§</a> header 5</h2>
-<h2 id="header-2-3"><a class="header-anchor" href="#header-2-3">§</a> header 2</h2>
+<h2 id="header-1-2"><a class="header-anchor" href="#header-1-2">§</a> header 1</h2>
+`
+  expect(md.render(mdContent)).toBe(htmlContent)
+})
+
+test('slugStartIndex set to 0', () => {
+  const md = getMarkdownIt()
+    .use(markdownItAnchor, {
+      permalink: true,
+      permalinkBefore: true,
+      permalinkSymbol: '§',
+      level: [1, 2],
+      uniqueSlugStartIndex: 0
+    })
+    .use(markdownItTocDoneRight, { slugStartIndex: 0 })
+  const mdContent = '[toc]\n\n# header\n\n## header'
+  const htmlContent = `<nav class="table-of-contents"><ol><li><a href="#header"> header</a><ol><li><a href="#header-0"> header</a></li></ol></li></ol></nav><h1 id="header"><a class="header-anchor" href="#header">§</a> header</h1>
+<h2 id="header-0"><a class="header-anchor" href="#header-0">§</a> header</h2>
 `
   expect(md.render(mdContent)).toBe(htmlContent)
 })
@@ -192,11 +209,13 @@ test('all other options should work as expected', () => {
       permalink: true,
       permalinkBefore: true,
       permalinkSymbol: '§',
+      uniqueSlugStartIndex: 2,
       slugify: uslugify
     })
     .use(markdownItTocDoneRight, {
       placeholder: '\\@\\[\\[TOC\\]\\]',
       slugify: uslugify,
+      slugStartIndex: 2,
       containerClass: 'user-content-toc',
       listClass: 'my-list',
       itemClass: 'my-item',
@@ -207,7 +226,7 @@ test('all other options should work as expected', () => {
         console.log(ast)
       }
     })
-  const mdContent = '@[[TOC]]\n\n# 日本語\n\n    # should be considered as code'
-  const htmlContent = '<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語">§</a> 日本語</h1>\n<pre><code># should be considered as code</code></pre>\n'
+  const mdContent = '@[[TOC]]\n\n# 日本語\n\n# 日本語\n\n    # should be considered as code'
+  const htmlContent = '<nav class="user-content-toc"><ul class="my-list"><li class="my-item"><a class="my-link" href="#日本語"><span> 日本語</span></a></li><li class="my-item"><a class="my-link" href="#日本語-2"><span> 日本語</span></a></li></ul></nav><h1 id="日本語"><a class="header-anchor" href="#日本語">§</a> 日本語</h1>\n<h1 id="日本語-2"><a class="header-anchor" href="#日本語-2">§</a> 日本語</h1>\n<pre><code># should be considered as code</code></pre>\n'
   expect(md.render(mdContent)).toBe(htmlContent)
 })
