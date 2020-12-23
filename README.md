@@ -37,8 +37,8 @@ var md = window.markdownit({
 	html: false,
 	xhtmlOut: true,
 	typographer: true
-}).use( window.markdownitAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§' } )
-  .use( window.markdownitTocDoneRight );
+}).use( window.markdownItAnchor, { permalink: true, permalinkBefore: true, permalinkSymbol: '§' } )
+  .use( window.markdownItTocDoneRight );
 
 var result = md.render("# markdown-it rulezz!\n\n${toc}\n## with markdown-it-toc-done-right rulezz even more!");
 ```
