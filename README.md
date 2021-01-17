@@ -60,6 +60,7 @@ Name                   | Description                                            
 `uniqueSlugStartIndex` | Index to start with when making duplicate slugs unique.          | 1
 `containerClass`       | The class for the container DIV                                  | "table-of-contents"
 `containerId`          | The ID for the container DIV                                     | `undefined`
+`containerLabel`       | A screen reader, not visible, label for the container            | "Table of contents"
 `listClass`            | The class for the `listType` HTMLElement                         | `undefined`
 `itemClass`            | The class for the LI                                             | `undefined`
 `linkClass`            | The class for the A                                              | `undefined`
@@ -75,6 +76,8 @@ function format(x, htmlencode) {
 	return `<span>${htmlencode(x)}</span>`;
 }
 ```
+
+`containerLabel` is a label screen readers for the blind and other assistive technologies can use to distinguish this particular `nav` element from others on the page, e. g. for the main navigation. This label is usually only visible when inspecting the accessibility properties in developer tools.
 
 ## User-Friendly URLs
 

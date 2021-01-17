@@ -29,6 +29,7 @@ function tocPlugin (md, options) {
     uniqueSlugStartIndex: 1,
     containerClass: 'table-of-contents',
     containerId: undefined,
+    containerLabel: 'Table of contents',
     listClass: undefined,
     itemClass: undefined,
     linkClass: undefined,
@@ -89,7 +90,7 @@ function tocPlugin (md, options) {
       _options = Object.assign(_options, token.inlineOptions)
     }
     const id = _options.containerId ? ` id="${htmlencode(_options.containerId)}"` : ''
-    return `<nav${id} class="${htmlencode(_options.containerClass)}">`
+    return `<nav${id} class="${htmlencode(_options.containerClass)}" aria-label="${htmlencode(_options.containerLabel)}">`
   }
 
   md.renderer.rules.tocClose = function (/* tokens, idx, options, env, renderer */) {
