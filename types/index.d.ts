@@ -7,6 +7,7 @@ declare module 'markdown-it-toc-done-right' {
         uniqueSlugStartIndex: number
         containerClass: string
         containerId: string
+        containerLabel: string
         listClass: string
         itemClass: string
         linkClass: string
