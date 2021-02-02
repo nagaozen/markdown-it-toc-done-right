@@ -1,5 +1,5 @@
 declare module 'markdown-it-toc-done-right' {
-    import MarkdownIt from 'markdown-it/lib'
+    import { PluginWithOptions } from 'markdown-it';
 
     export interface TocOptions {
         placeholder: string
@@ -22,7 +22,7 @@ declare module 'markdown-it-toc-done-right' {
         c: TocAst[]
     }
 
-    const markdownItTocDoneRight: MarkdownIt.PluginWithOptions<Partial<TocOptions>>
+    const markdownItTocDoneRight: PluginWithOptions<Partial<TocOptions>>
 
     export default markdownItTocDoneRight
 }
